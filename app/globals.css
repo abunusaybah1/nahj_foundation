@@ -1,27 +1,26 @@
 /* app/globals.css */
 @import "tailwindcss";
-@tailwind utilities;
 
 @theme {
   /* wine */
-  --wine-50: #F7ECEF;
-  --wine-100: #EBD3DA;
-  --wine-300: #B4577A;
-  --wine-500: #7A1230; /* primary accent */
-  --wine-700: #5A0E24;
-  --wine-900: #330815; /* deep background */
+  --color-wine-50: #F7ECEF;
+  --color-wine-100: #EBD3DA;
+  --color-wine-300: #B4577A;
+  --color-wine-500: #7A1230; /* primary accent */
+  --color-wine-700: #5A0E24;
+  --color-wine-900: #330815; /* deep background */
 
   /* sky blue */
-  --sky-50: #EEF6FA;
-  --sky-100: #D3E9F2;
-  --sky-300: #7FB8D1;
-  --sky-500: #3E7F9E; /* primary accent, muted not neon */
-  --sky-700: #2C5C74;
+  --color-sky-50: #EEF6FA;
+  --color-sky-100: #D3E9F2;
+  --color-sky-300: #7FB8D1;
+  --color-sky-500: #3E7F9E; /* primary accent, muted not neon */
+  --color-sky-700: #2C5C74;
 
   /* neutrals */
-  --paper: #F6F1E7; /* warm cream */
-  --paper-dim: #EBE3D3;
-  --ink: #241A16; /* warm near-black */
+  --color-paper: #F6F1E7; /* warm cream */
+  --color-paper-dim: #EBE3D3;
+  --color-ink: #241A16; /* warm near-black */
 
   /* fonts (populated by next/font in layout.tsx) */
   --font-display: var(--font-fraunces), serif;
@@ -34,18 +33,18 @@ html {
 }
 
 body {
-  background-color: var(--paper);
-  color: var(--ink);
+  background-color: var(--color-paper);
+  color: var(--color-ink);
   font-family: var(--font-body);
 }
 
 ::selection {
-  background-color: var(--wine-500);
-  color: var(--paper);
+  background-color: var(--color-wine-500);
+  color: var(--color-paper);
 }
 
 :focus-visible {
-  outline: 2px solid var(--sky-500);
+  outline: 2px solid var(--color-sky-500);
   outline-offset: 3px;
 }
 
@@ -67,7 +66,7 @@ input[type="number"] {
 }
 
 .texture-dots {
-  background-image: radial-gradient(var(--wine-500) 0.6px, transparent 0.6px);
+  background-image: radial-gradient(var(--color-wine-500) 0.6px, transparent 0.6px);
   background-size: 18px 18px;
   opacity: 0.08;
 }

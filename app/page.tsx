@@ -1,17 +1,37 @@
+// app/page.tsx
 import Link from "next/link";
-import { createClient } from "@/lib/supabase/client";
+import { createClient } from "@/lib/supabase/server";
 
 export const revalidate = 60;
 
-async function getFeatured() {
-  const supabase = createClient();
-  const { data } = await supabase
+async function getFeaturedCampaigns() {
+  // Server Components must use the server client (reads request
+  // cookies) — never the browser client, which has no cookies to read
+  // outside the browser and will silently return unauthenticated data.
+  const supabase = await createClient();
+
+  const { data: campaigns } = await supabase
     .from("campaigns")
-    .select("id, slug, title, goal_amount, raised_amount, image_url")
+    .select("id, slug, title, goal_amount, image_url")
     .eq("status", "published")
     .order("created_at", { ascending: false })
     .limit(4);
-  return data ?? [];
+
+  if (!campaigns || campaigns.length === 0) return [];
+
+  const { data: totals } = await supabase.rpc("get_campaigns_raised", {
+    campaign_ids: campaigns.map((c) => c.id),
+  });
+
+  const raisedByCampaign = new Map<string, number>();
+  for (const row of totals ?? []) {
+    raisedByCampaign.set(row.campaign_id, Number(row.raised));
+  }
+
+  return campaigns.map((c) => ({
+    ...c,
+    raised: raisedByCampaign.get(c.id) ?? 0,
+  }));
 }
 
 function currency(n: number) {
@@ -23,16 +43,20 @@ function currency(n: number) {
 }
 
 export default async function LandingPage() {
-  const campaigns = await getFeatured();
+  const campaigns = await getFeaturedCampaigns();
+  const totalRaised = campaigns.reduce((sum, c) => sum + c.raised, 0);
 
   return (
     <main className="bg-paper text-ink">
       {/* HERO — asymmetric, no centered badge/blob pattern */}
-      <section className="relative overflow-hidden border-b border-wine/15">
+      <section className="relative overflow-hidden border-b border-wine-500/15">
         <div className="absolute inset-0 texture-dots" aria-hidden />
         <div className="relative mx-auto grid max-w-6xl gap-10 px-6 py-20 sm:py-28 lg:grid-cols-[1.3fr_0.7fr] lg:items-end">
           <div>
-            <h1 className="font-display text-5xl  leading-[1.05] tracking-tight text-wine-900 sm:text-6xl">
+            <p className="mb-4 font-mono text-xs uppercase tracking-[0.2em] text-wine-500">
+              Community-audited giving
+            </p>
+            <h1 className="font-display text-5xl italic leading-[1.05] tracking-tight text-wine-900 sm:text-6xl">
               Give with
               <br />
               <span className="not-italic">clarity.</span>
@@ -51,15 +75,12 @@ export default async function LandingPage() {
             </div>
           </div>
 
-          {/* right column: a single hard stat instead of an icon grid */}
-          <div className="border-l-2 border-sky-500 pl-6">
-            <p className="font-mono text-4xl font-medium text-sky-700 sm:text-5xl">
-              {currency(
-                campaigns.reduce((s, c) => s + (c.raised_amount ?? 0), 0),
-              )}
+          <div className="border-l-2 border-wine-500 pl-6">
+            <p className="font-mono text-4xl font-medium text-wine-700 sm:text-5xl">
+              {currency(totalRaised)}
             </p>
             <p className="mt-2 text-sm text-ink/60">
-              raised across {campaigns.length || 0} active campaigns
+              raised across {campaigns.length} active campaigns
             </p>
           </div>
         </div>
@@ -84,7 +105,7 @@ export default async function LandingPage() {
             {campaigns.map((c) => {
               const pct = Math.min(
                 100,
-                Math.round(((c.raised_amount ?? 0) / c.goal_amount) * 100),
+                Math.round((c.raised / Number(c.goal_amount)) * 100),
               );
               return (
                 <Link
@@ -102,7 +123,7 @@ export default async function LandingPage() {
                     />
                   </div>
                   <p className="mt-2 font-mono text-xs text-ink/60">
-                    {pct}% of {currency(c.goal_amount)}
+                    {pct}% of {currency(Number(c.goal_amount))}
                   </p>
                 </Link>
               );
@@ -111,10 +132,8 @@ export default async function LandingPage() {
         </section>
       )}
 
-      <footer className="border-t border-ink/10 bg-paper/90 py-6 text-center text-sm text-ink/60">
-        <div className="flex items-center justify-center">
-          <span>© {new Date().getFullYear()} An-Nahj Foundation</span>
-        </div>
+      <footer className="border-t border-ink/10 py-6 text-center text-sm text-ink/60">
+        <span>© {new Date().getFullYear()} Nahj</span>
       </footer>
     </main>
   );

@@ -1,0 +1,335 @@
+// components/DonationSheet.tsx
+"use client";
+
+import { useEffect, useMemo, useState } from "react";
+
+declare global {
+  interface Window {
+    PaystackPop?: {
+      setup: (options: Record<string, unknown>) => { openIframe: () => void };
+    };
+  }
+}
+
+const PRESET_AMOUNTS = [1000, 5000, 10000, 25000];
+
+type Step = "amount" | "details" | "success";
+
+export default function DonationSheet({
+  campaignSlug,
+  publicKey,
+  onClose,
+  onDonationConfirmed,
+}: {
+  campaignSlug: string;
+  publicKey: string;
+  onClose: () => void;
+  onDonationConfirmed: (amount: number) => void;
+}) {
+  const [step, setStep] = useState<Step>("amount");
+  const [amount, setAmount] = useState<number | null>(5000);
+  const [customAmount, setCustomAmount] = useState("");
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
+  const [anonymous, setAnonymous] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [scriptReady, setScriptReady] = useState(false);
+
+  useEffect(() => {
+    if (document.getElementById("paystack-inline-script")) {
+      setScriptReady(true);
+      return;
+    }
+    const script = document.createElement("script");
+    script.id = "paystack-inline-script";
+    script.src = "https://js.paystack.co/v1/inline.js";
+    script.async = true;
+    script.onload = () => setScriptReady(true);
+    document.body.appendChild(script);
+  }, []);
+
+  const finalAmount = useMemo(() => {
+    if (customAmount) {
+      const parsed = parseInt(customAmount.replace(/[^0-9]/g, ""), 10);
+      return Number.isFinite(parsed) ? parsed : 0;
+    }
+    return amount ?? 0;
+  }, [amount, customAmount]);
+
+  function selectPreset(value: number) {
+    setAmount(value);
+    setCustomAmount("");
+  }
+
+  async function handlePay() {
+    setError(null);
+
+    if (!finalAmount || finalAmount < 100) {
+      setError("Please give an amount of at least ₦100.");
+      return;
+    }
+    if (!email) {
+      setError("An email address is required for your receipt.");
+      return;
+    }
+    if (!scriptReady || !window.PaystackPop) {
+      setError("Payment is still loading — try again in a moment.");
+      return;
+    }
+
+    setSubmitting(true);
+
+    try {
+      const res = await fetch("/api/donate/initialize", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          campaignSlug,
+          amount: finalAmount,
+          email,
+          name: anonymous ? "Anonymous" : name,
+          phone,
+          anonymous,
+        }),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok || !data?.reference) {
+        setError(data?.error ?? "Could not start the transaction. Try again.");
+        setSubmitting(false);
+        return;
+      }
+
+      const handler = window.PaystackPop.setup({
+        key: publicKey,
+        email,
+        amount: finalAmount * 100,
+        ref: data.reference,
+        currency: "NGN",
+        onClose: () => setSubmitting(false),
+        callback: (response: { reference: string }) => {
+          fetch("/api/donate/verify", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ reference: response.reference }),
+          })
+            .then((r) => r.json())
+            .then((result) => {
+              setSubmitting(false);
+              if (result?.status === "success") {
+                setStep("success");
+                onDonationConfirmed(finalAmount);
+              } else {
+                setError(
+                  "We received a response but couldn't confirm the payment yet. Check your email for a receipt, or contact us if you were charged."
+                );
+              }
+            })
+            .catch(() => {
+              setSubmitting(false);
+              setError(
+                "Payment went through, but we couldn't confirm it here. Refresh in a minute — your receipt will confirm the status."
+              );
+            });
+        },
+      });
+
+      handler.openIframe();
+    } catch {
+      setSubmitting(false);
+      setError("Something went wrong starting your donation. Try again.");
+    }
+  }
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-end justify-center sm:items-center">
+      <button
+        aria-label="Close donation form"
+        onClick={onClose}
+        className="absolute inset-0 bg-ink/70 backdrop-blur-[2px]"
+      />
+
+      <div
+        role="dialog"
+        aria-modal="true"
+        aria-label="Make a donation"
+        className="relative z-10 w-full max-w-md border border-ink/10 bg-paper px-6 pb-8 pt-5 text-ink shadow-[0_-4px_24px_rgba(36,26,22,0.18)] sm:shadow-[0_8px_32px_rgba(36,26,22,0.18)]"
+      >
+        <div className="mx-auto mb-4 h-1 w-10 bg-ink/15 sm:hidden" />
+
+        <div className="mb-5 flex items-center justify-between border-b border-ink/10 pb-4">
+          <p className="font-display text-lg italic">
+            {step === "amount" && "Choose an amount"}
+            {step === "details" && "A few details"}
+            {step === "success" && "Thank you"}
+          </p>
+          <button
+            onClick={onClose}
+            aria-label="Close"
+            className="border border-ink/15 px-2 py-1 text-xs text-ink/60 hover:border-ink/40 hover:text-ink"
+          >
+            close
+          </button>
+        </div>
+
+        {step === "amount" && (
+          <div className="flex flex-col gap-5">
+            <div className="grid grid-cols-2 gap-2">
+              {PRESET_AMOUNTS.map((value) => {
+                const active = !customAmount && amount === value;
+                return (
+                  <button
+                    key={value}
+                    onClick={() => selectPreset(value)}
+                    className={`border px-4 py-3 font-mono text-base transition ${
+                      active
+                        ? "border-wine-500 bg-wine-500 text-paper"
+                        : "border-ink/15 bg-transparent text-ink hover:border-wine-500"
+                    }`}
+                  >
+                    ₦{value.toLocaleString("en-NG")}
+                  </button>
+                );
+              })}
+            </div>
+
+            <label className="flex flex-col gap-1.5">
+              <span className="font-mono text-xs uppercase tracking-wide text-ink/50">
+                Or enter your own amount
+              </span>
+              <div className="flex items-center gap-2 border border-ink/15 bg-transparent px-4 py-3 focus-within:border-sky-500">
+                <span className="font-mono text-ink/50">₦</span>
+                <input
+                  inputMode="numeric"
+                  placeholder="0"
+                  value={customAmount}
+                  onChange={(e) => setCustomAmount(e.target.value)}
+                  className="w-full bg-transparent font-mono text-base outline-none"
+                />
+              </div>
+            </label>
+
+            {error && <p className="text-sm text-wine-500">{error}</p>}
+
+            <button
+              onClick={() => {
+                if (!finalAmount || finalAmount < 100) {
+                  setError("Please give an amount of at least ₦100.");
+                  return;
+                }
+                setError(null);
+                setStep("details");
+              }}
+              className="bg-wine-500 px-4 py-3.5 text-center font-semibold text-paper transition hover:bg-wine-700"
+            >
+              Continue
+            </button>
+          </div>
+        )}
+
+        {step === "details" && (
+          <div className="flex flex-col gap-4">
+            <label className="flex flex-col gap-1.5">
+              <span className="font-mono text-xs uppercase tracking-wide text-ink/50">
+                Email — for your receipt
+              </span>
+              <input
+                type="email"
+                required
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="you@example.com"
+                className="border border-ink/15 bg-transparent px-4 py-3 outline-none focus:border-sky-500"
+              />
+            </label>
+
+            <label className="flex flex-col gap-1.5">
+              <span className="font-mono text-xs uppercase tracking-wide text-ink/50">
+                Full name {anonymous && "(hidden — giving anonymously)"}
+              </span>
+              <input
+                type="text"
+                value={name}
+                disabled={anonymous}
+                onChange={(e) => setName(e.target.value)}
+                placeholder="Your name"
+                className="border border-ink/15 bg-transparent px-4 py-3 outline-none focus:border-sky-500 disabled:opacity-40"
+              />
+            </label>
+
+            <label className="flex flex-col gap-1.5">
+              <span className="font-mono text-xs uppercase tracking-wide text-ink/50">
+                Phone (optional)
+              </span>
+              <input
+                type="tel"
+                value={phone}
+                onChange={(e) => setPhone(e.target.value)}
+                placeholder="080..."
+                className="border border-ink/15 bg-transparent px-4 py-3 outline-none focus:border-sky-500"
+              />
+            </label>
+
+            <label className="flex items-center gap-2 text-sm text-ink/70">
+              <input
+                type="checkbox"
+                checked={anonymous}
+                onChange={(e) => setAnonymous(e.target.checked)}
+                className="h-4 w-4 accent-wine-500"
+              />
+              Give anonymously
+            </label>
+
+            {error && <p className="text-sm text-wine-500">{error}</p>}
+
+            <div className="mt-1 flex items-center justify-between border border-ink/10 bg-paper-dim px-4 py-3">
+              <span className="text-sm text-ink/60">You&apos;re giving</span>
+              <span className="font-mono text-lg">
+                ₦{finalAmount.toLocaleString("en-NG")}
+              </span>
+            </div>
+
+            <div className="flex gap-3">
+              <button
+                onClick={() => setStep("amount")}
+                className="border border-ink/15 px-4 py-3.5 font-medium text-ink/70 hover:border-ink/40"
+              >
+                Back
+              </button>
+              <button
+                onClick={handlePay}
+                disabled={submitting}
+                className="flex-1 bg-sky-500 px-4 py-3.5 text-center font-semibold text-paper transition hover:bg-sky-700 disabled:opacity-60"
+              >
+                {submitting ? "Opening payment…" : "Pay now"}
+              </button>
+            </div>
+          </div>
+        )}
+
+        {step === "success" && (
+          <div className="flex flex-col items-center gap-3 py-4 text-center">
+            <div className="flex h-12 w-12 items-center justify-center border border-sky-500 font-mono text-xl text-sky-700">
+              ✓
+            </div>
+            <p className="font-display text-xl italic">
+              ₦{finalAmount.toLocaleString("en-NG")} received
+            </p>
+            <p className="text-sm text-ink/60">
+              A receipt has been sent to {email}. Thank you for giving.
+            </p>
+            <button
+              onClick={onClose}
+              className="mt-3 bg-wine-500 px-6 py-3 font-semibold text-paper hover:bg-wine-700"
+            >
+              Done
+            </button>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}

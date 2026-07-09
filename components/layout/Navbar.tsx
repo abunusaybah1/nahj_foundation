@@ -1,3 +1,4 @@
+// components/layout/Navbar.tsx
 "use client";
 
 import Link from "next/link";
@@ -12,12 +13,14 @@ export default function Navbar() {
   const router = useRouter();
   const [role, setRole] = useState<Role>(null);
   const [checked, setChecked] = useState(false);
-  const supabase = createClient();
 
   useEffect(() => {
+    const supabase = createClient();
+    let cancelled = false;
+
     supabase.auth.getUser().then(async ({ data: { user } }) => {
       if (!user) {
-        setChecked(true);
+        if (!cancelled) setChecked(true);
         return;
       }
       const { data: profile } = await supabase
@@ -25,12 +28,20 @@ export default function Navbar() {
         .select("role")
         .eq("id", user.id)
         .single();
-      setRole((profile?.role as Role) ?? null);
-      setChecked(true);
+
+      if (!cancelled) {
+        setRole((profile?.role as Role) ?? null);
+        setChecked(true);
+      }
     });
+
+    return () => {
+      cancelled = true;
+    };
   }, [pathname]);
 
   async function handleLogout() {
+    const supabase = createClient();
     await supabase.auth.signOut();
     router.push("/admin/login");
     router.refresh();
@@ -40,32 +51,32 @@ export default function Navbar() {
 
   if (inAdmin && pathname !== "/admin/login") {
     return (
-      <header className="sticky top-0 z-40 border-b border-wine/20 bg-ink/95 backdrop-blur">
+      <header className="sticky top-0 z-40 border-b border-ink/10 bg-paper/95 backdrop-blur">
         <nav className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
           <Link
             href="/admin"
-            className="font-display text-lg font-semibold text-paper"
+            className="font-display text-lg italic text-wine-900"
           >
-            Admin
+            Nahj Admin
           </Link>
-          <div className="flex items-center gap-6 text-sm text-paper/70">
-            <Link href="/admin" className="hover:text-sky-soft">
+          <div className="flex items-center gap-6 text-sm text-ink/70">
+            <Link href="/admin" className="hover:text-wine-500">
               Dashboard
             </Link>
-            <Link href="/admin/campaigns/new" className="hover:text-sky-soft">
-              New Campaign
+            <Link href="/admin/campaigns/new" className="hover:text-wine-500">
+              New campaign
             </Link>
             {role === "super_admin" && (
-              <Link href="/admin/sub-admins" className="hover:text-sky-soft">
-                Sub-Admins
+              <Link href="/admin/sub-admins" className="hover:text-wine-500">
+                Sub-admins
               </Link>
             )}
-            <Link href="/campaigns" className="hover:text-sky-soft">
-              View Site
+            <Link href="/campaigns" className="hover:text-wine-500">
+              View site
             </Link>
             <button
               onClick={handleLogout}
-              className="rounded-full bg-wine px-4 py-1.5 font-medium text-paper hover:bg-wine-soft"
+              className="border border-wine-500 px-4 py-1.5 font-medium text-wine-500 transition hover:bg-wine-500 hover:text-paper"
             >
               Log out
             </button>
@@ -77,20 +88,15 @@ export default function Navbar() {
 
   // Public nav
   return (
-    <header className="sticky top-0 z-40 border-b border-sky/10 bg-ink/95 backdrop-blur">
+    <header className="sticky top-0 z-40 border-b border-ink/10 bg-paper/95 backdrop-blur">
       <nav className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
-        <Link
-          href="/"
-          className="font-display text-lg font-semibold text-paper"
-        >
-          Fill the Pot
+        <Link href="/" className="font-display text-lg italic text-wine-900">
+          Nahj
         </Link>
-        <div className="flex items-center gap-6 text-sm text-paper/70">
+        <div className="flex items-center gap-6 text-sm text-ink/70">
           <Link
             href="/"
-            className={
-              pathname === "/" ? "text-sky-soft" : "hover:text-sky-soft"
-            }
+            className={pathname === "/" ? "text-sky-700" : "hover:text-sky-700"}
           >
             Home
           </Link>
@@ -98,8 +104,8 @@ export default function Navbar() {
             href="/campaigns"
             className={
               pathname?.startsWith("/campaigns")
-                ? "text-sky-soft"
-                : "hover:text-sky-soft"
+                ? "text-sky-700"
+                : "hover:text-sky-700"
             }
           >
             Campaigns
@@ -108,16 +114,16 @@ export default function Navbar() {
             (role ? (
               <Link
                 href="/admin"
-                className="rounded-full bg-sky px-4 py-1.5 font-medium text-ink hover:bg-sky-soft"
+                className="bg-sky-500 px-4 py-1.5 font-medium text-paper hover:bg-sky-700"
               >
                 Dashboard
               </Link>
             ) : (
               <Link
                 href="/admin/login"
-                className="rounded-full border border-sky/40 px-4 py-1.5 hover:border-sky"
+                className="border border-sky-500/40 px-4 py-1.5 hover:border-sky-500"
               >
-                Admin Login
+                Admin login
               </Link>
             ))}
         </div>
