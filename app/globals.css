@@ -1,0 +1,73 @@
+/* app/globals.css */
+@import "tailwindcss";
+@tailwind utilities;
+
+@theme {
+  /* wine */
+  --wine-50: #F7ECEF;
+  --wine-100: #EBD3DA;
+  --wine-300: #B4577A;
+  --wine-500: #7A1230; /* primary accent */
+  --wine-700: #5A0E24;
+  --wine-900: #330815; /* deep background */
+
+  /* sky blue */
+  --sky-50: #EEF6FA;
+  --sky-100: #D3E9F2;
+  --sky-300: #7FB8D1;
+  --sky-500: #3E7F9E; /* primary accent, muted not neon */
+  --sky-700: #2C5C74;
+
+  /* neutrals */
+  --paper: #F6F1E7; /* warm cream */
+  --paper-dim: #EBE3D3;
+  --ink: #241A16; /* warm near-black */
+
+  /* fonts (populated by next/font in layout.tsx) */
+  --font-display: var(--font-fraunces), serif;
+  --font-body: var(--font-archivo), sans-serif;
+  --font-mono: var(--font-plex-mono), monospace;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-body);
+}
+
+::selection {
+  background-color: var(--wine-500);
+  color: var(--paper);
+}
+
+:focus-visible {
+  outline: 2px solid var(--sky-500);
+  outline-offset: 3px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+input[type="number"] {
+  -moz-appearance: textfield;
+}
+
+.texture-dots {
+  background-image: radial-gradient(var(--wine-500) 0.6px, transparent 0.6px);
+  background-size: 18px 18px;
+  opacity: 0.08;
+}
