@@ -54,14 +54,13 @@ export default async function LandingPage() {
         <div className="absolute inset-0 texture-dots" aria-hidden />
         <div className="relative mx-auto grid max-w-6xl gap-10 px-6 py-20 sm:py-28 lg:grid-cols-[1.3fr_0.7fr] lg:items-end">
           <div>
-           
             <h1 className="font-display text-5xl  leading-[1.05] tracking-tight text-wine-900 sm:text-6xl">
               Be the reason why someone smiles again
             </h1>
             <p className="mt-6 max-w-md text-base leading-relaxed text-ink/70">
-              The Prophet said, "Whoever relieves a believer's hardship in this
+              The Prophet said, &quot;Whoever relieves a believer&apos;s hardship in this
               world, Allah will relieve his hardship on the Day of
-              Resurrection."
+              Resurrection.&quot;
             </p>
             <p className="mt-6 max-w-md text-base leading-relaxed text-ink/70">
               We tracks every campaign from first naira to final delivery —
@@ -114,7 +113,11 @@ export default async function LandingPage() {
                   className="group bg-paper p-5 transition hover:bg-wine-50 border border-ink/70"
                 >
                   {c.image_url && (
-                    <Image src={c.image_url} height={100} width={200} alt="" />
+                    <Image
+                      src={c.image_url}
+                      alt={c.title}
+                      className=" bg-paper-dim bg-center bg-cover grayscale-[15%] transition group-hover:grayscale-0"
+                    />
                   )}
 
                   <h3 className="font-display text-lg leading-snug text-ink group-hover:text-wine-700">

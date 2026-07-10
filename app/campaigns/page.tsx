@@ -70,8 +70,6 @@ export default async function CampaignsPage() {
                   src={c.image_url}
                   alt={c.title}
                   className=" bg-paper-dim bg-center bg-cover grayscale-[15%] transition group-hover:grayscale-0"
-                  
-                  
                 />
               )}
               <div className="p-6">

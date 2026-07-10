@@ -32,7 +32,7 @@ export default function DonationSheet({
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
-  const [anonymous, setAnonymous] = useState(false);
+  // const [anonymous, setAnonymous] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [scriptReady, setScriptReady] = useState(false);
@@ -89,9 +89,9 @@ export default function DonationSheet({
           campaignSlug,
           amount: finalAmount,
           email,
-          name: anonymous ? "Anonymous" : name,
+          // name: anonymous ? "Anonymous" : name,
           phone,
-          anonymous,
+          // anonymous,
         }),
       });
 
@@ -124,14 +124,14 @@ export default function DonationSheet({
                 onDonationConfirmed(finalAmount);
               } else {
                 setError(
-                  "We received a response but couldn't confirm the payment yet. Check your email for a receipt, or contact us if you were charged."
+                  "We received a response but couldn't confirm the payment yet. Check your email for a receipt, or contact us if you were charged.",
                 );
               }
             })
             .catch(() => {
               setSubmitting(false);
               setError(
-                "Payment went through, but we couldn't confirm it here. Refresh in a minute — your receipt will confirm the status."
+                "Payment went through, but we couldn't confirm it here. Refresh in a minute — your receipt will confirm the status.",
               );
             });
         },
@@ -161,17 +161,17 @@ export default function DonationSheet({
         <div className="mx-auto mb-4 h-1 w-10 bg-ink/15 sm:hidden" />
 
         <div className="mb-5 flex items-center justify-between border-b border-ink/10 pb-4">
-          <p className="font-display text-lg italic">
+          <p className="font-display text-lg ">
             {step === "amount" && "Choose an amount"}
-            {step === "details" && "A few details"}
+            {step === "details" && "A few details..."}
             {step === "success" && "Thank you"}
           </p>
           <button
             onClick={onClose}
             aria-label="Close"
-            className="border border-ink/15 px-2 py-1 text-xs text-ink/60 hover:border-ink/40 hover:text-ink"
+            className="border border-ink px-2 py-1 text-xs font-bold text-ink hover:bg-ink hover:text-paper"
           >
-            close
+            X
           </button>
         </div>
 
@@ -197,7 +197,7 @@ export default function DonationSheet({
             </div>
 
             <label className="flex flex-col gap-1.5">
-              <span className="font-mono text-xs uppercase tracking-wide text-ink/50">
+              <span className="font-mono text-xs uppercase tracking-wide text-ink">
                 Or enter your own amount
               </span>
               <div className="flex items-center gap-2 border border-ink/15 bg-transparent px-4 py-3 focus-within:border-sky-500">
@@ -233,8 +233,8 @@ export default function DonationSheet({
         {step === "details" && (
           <div className="flex flex-col gap-4">
             <label className="flex flex-col gap-1.5">
-              <span className="font-mono text-xs uppercase tracking-wide text-ink/50">
-                Email — for your receipt
+              <span className="font-mono text-xs uppercase tracking-wide text-ink">
+                Email (for your receipt)
               </span>
               <input
                 type="email"
@@ -247,13 +247,15 @@ export default function DonationSheet({
             </label>
 
             <label className="flex flex-col gap-1.5">
-              <span className="font-mono text-xs uppercase tracking-wide text-ink/50">
-                Full name {anonymous && "(hidden — giving anonymously)"}
+              <span className="font-mono text-xs uppercase tracking-wide text-ink">
+                Full name
+                {/* {anonymous && "(hidden (giving anonymously)"} */}
               </span>
               <input
                 type="text"
+                required
                 value={name}
-                disabled={anonymous}
+                // disabled={anonymous}
                 onChange={(e) => setName(e.target.value)}
                 placeholder="Your name"
                 className="border border-ink/15 bg-transparent px-4 py-3 outline-none focus:border-sky-500 disabled:opacity-40"
@@ -261,7 +263,7 @@ export default function DonationSheet({
             </label>
 
             <label className="flex flex-col gap-1.5">
-              <span className="font-mono text-xs uppercase tracking-wide text-ink/50">
+              <span className="font-mono text-xs uppercase tracking-wide text-ink">
                 Phone (optional)
               </span>
               <input
@@ -273,7 +275,7 @@ export default function DonationSheet({
               />
             </label>
 
-            <label className="flex items-center gap-2 text-sm text-ink/70">
+            {/* <label className="flex items-center gap-2 text-sm text-ink">
               <input
                 type="checkbox"
                 checked={anonymous}
@@ -281,7 +283,7 @@ export default function DonationSheet({
                 className="h-4 w-4 accent-wine-500"
               />
               Give anonymously
-            </label>
+            </label> */}
 
             {error && <p className="text-sm text-wine-500">{error}</p>}
 
@@ -295,7 +297,7 @@ export default function DonationSheet({
             <div className="flex gap-3">
               <button
                 onClick={() => setStep("amount")}
-                className="border border-ink/15 px-4 py-3.5 font-medium text-ink/70 hover:border-ink/40"
+                className="border border-sky-900 px-4 py-3.5 font-medium text-sky-950 hover:border-sky-500 hover:bg-sky-50 transition"
               >
                 Back
               </button>
@@ -312,14 +314,14 @@ export default function DonationSheet({
 
         {step === "success" && (
           <div className="flex flex-col items-center gap-3 py-4 text-center">
-            <div className="flex h-12 w-12 items-center justify-center border border-sky-500 font-mono text-xl text-sky-700">
+            <div className="flex h-12 w-12 items-center justify-center border border-sky-950 font-mono text-xl text-sky-950">
               ✓
             </div>
-            <p className="font-display text-xl italic">
+            <p className="font-display text-xl ">
               ₦{finalAmount.toLocaleString("en-NG")} received
             </p>
             <p className="text-sm text-ink/60">
-              A receipt has been sent to {email}. Thank you for giving.
+              A receipt has been sent to {email}. May Allah bless you for your generosity.
             </p>
             <button
               onClick={onClose}
