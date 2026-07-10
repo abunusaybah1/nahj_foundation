@@ -2,8 +2,8 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
+import Image from "next/image";
 
 type CampaignFormValues = {
   id?: string;
@@ -18,6 +18,8 @@ export default function CampaignForm({
   initial,
   onSubmit,
   submitLabel,
+  savedLabel = "Saved.",
+  onSaved,
 }: {
   initial: CampaignFormValues;
   onSubmit: (values: {
@@ -28,8 +30,13 @@ export default function CampaignForm({
     status: "draft" | "published" | "archived";
   }) => Promise<{ error?: string; success?: boolean; redirectTo?: string }>;
   submitLabel: string;
+  savedLabel?: string;
+  // Called ~700ms after a successful save, once the "Saved" message
+  // has had a moment to be visible — the parent decides what happens
+  // next (switch back to a read-only view, navigate to a new page,
+  // etc). Receives the redirectTo the server action returned, if any.
+  onSaved?: (redirectTo?: string) => void;
 }) {
-  const router = useRouter();
   const [title, setTitle] = useState(initial.title);
   const [story, setStory] = useState(initial.story);
   const [goalAmount, setGoalAmount] = useState(
@@ -39,6 +46,7 @@ export default function CampaignForm({
   const [status, setStatus] = useState(initial.status);
   const [uploading, setUploading] = useState(false);
   const [submitting, setSubmitting] = useState(false);
+  const [saved, setSaved] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   async function handleImageChange(e: React.ChangeEvent<HTMLInputElement>) {
@@ -74,6 +82,7 @@ export default function CampaignForm({
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     setError(null);
+    setSaved(false);
 
     const parsedGoal = Number(goalAmount);
     if (
@@ -103,12 +112,18 @@ export default function CampaignForm({
       return;
     }
 
-    router.push(result?.redirectTo ?? "/admin");
-    router.refresh();
+    setSaved(true);
+    // Give the person a moment to actually see the confirmation before
+    // the parent moves on (e.g. switching back to the read-only view,
+    // or navigating to the newly created campaign).
+    setTimeout(() => onSaved?.(result?.redirectTo), 700);
   }
 
   return (
-    <form onSubmit={handleSubmit} className="flex flex-col gap-5">
+    <form
+      onSubmit={handleSubmit}
+      className="flex flex-col gap-5 border border-ink/10 bg-paper p-6 shadow-sm sm:p-8"
+    >
       <label className="flex flex-col gap-1.5">
         <span className="font-mono text-xs uppercase tracking-wide text-ink/50">
           Title
@@ -157,10 +172,17 @@ export default function CampaignForm({
           Campaign image
         </span>
         {imageUrl && (
-          <div
-            className="mb-2 h-40 w-full border border-ink/10 bg-cover bg-center"
-            style={{ backgroundImage: `url(${imageUrl})` }}
+          <Image
+            src={imageUrl}
+            alt={imageUrl}
+            className="mt-8 h-fit w-full border border-ink/10 bg-cover bg-center"
+            width={600}
+            height={400}
           />
+          //   <div
+          // className="mb-2 h-40 w-full border border-ink/10 bg-cover bg-center shadow-sm"
+          // style={{ backgroundImage: `url(${imageUrl})` }}
+          //   />
         )}
         <input
           type="file"
@@ -187,11 +209,12 @@ export default function CampaignForm({
       </label>
 
       {error && <p className="text-sm text-wine-500">{error}</p>}
+      {saved && <p className="text-sm text-sky-700">{savedLabel}</p>}
 
       <button
         type="submit"
         disabled={submitting || uploading}
-        className="self-start bg-wine-500 px-6 py-3 font-semibold text-paper transition hover:bg-wine-700 disabled:opacity-60"
+        className="self-start bg-wine-500 px-6 py-3 font-semibold text-paper shadow-sm transition hover:bg-wine-700 disabled:opacity-60"
       >
         {submitting ? "Saving…" : submitLabel}
       </button>

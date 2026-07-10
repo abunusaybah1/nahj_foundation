@@ -3,6 +3,7 @@
 
 import { useState } from "react";
 import DonationSheet from "@/components/DonationSheet";
+import Image from "next/image";
 
 function currency(n: number) {
   return new Intl.NumberFormat("en-NG", {
@@ -39,14 +40,17 @@ export default function CampaignClient({
       <p className="font-mono text-xs uppercase tracking-[0.2em] text-wine-500">
         Active campaign
       </p>
-      <h1 className="mt-3 font-display text-4xl italic leading-tight text-wine-900 sm:text-5xl">
+      <h1 className="mt-3 font-display text-4xl  leading-tight text-wine-900 sm:text-5xl">
         {campaign.title}
       </h1>
 
       {campaign.image_url && (
-        <div
-          className="mt-8 h-72 w-full border border-ink/10 bg-cover bg-center"
-          style={{ backgroundImage: `url(${campaign.image_url})` }}
+        <Image
+          src={campaign.image_url}
+          alt={campaign.title}
+          className="mt-8 h-fit w-full border border-ink/10 bg-cover bg-center"
+          width={600}
+          height={400}
         />
       )}
 

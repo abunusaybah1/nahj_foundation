@@ -39,7 +39,7 @@ export default function RootLayout({
       <body
         className={`${fraunces.variable} ${archivo.variable} ${plexMono.variable} antialiased`}
       >
-        <Navbar />
+        {/* <Navbar /> */}
         {children}
       </body>
     </html>

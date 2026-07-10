@@ -1,6 +1,7 @@
 // app/page.tsx
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
+import Image from "next/image";
 
 export const revalidate = 60;
 
@@ -53,16 +54,17 @@ export default async function LandingPage() {
         <div className="absolute inset-0 texture-dots" aria-hidden />
         <div className="relative mx-auto grid max-w-6xl gap-10 px-6 py-20 sm:py-28 lg:grid-cols-[1.3fr_0.7fr] lg:items-end">
           <div>
-            <p className="mb-4 font-mono text-xs uppercase tracking-[0.2em] text-wine-500">
-              Community-audited giving
-            </p>
-            <h1 className="font-display text-5xl italic leading-[1.05] tracking-tight text-wine-900 sm:text-6xl">
-              Give with
-              <br />
-              <span className="not-italic">clarity.</span>
+           
+            <h1 className="font-display text-5xl  leading-[1.05] tracking-tight text-wine-900 sm:text-6xl">
+              Be the reason why someone smiles again
             </h1>
             <p className="mt-6 max-w-md text-base leading-relaxed text-ink/70">
-              Nahj tracks every campaign from first naira to final delivery —
+              The Prophet said, "Whoever relieves a believer's hardship in this
+              world, Allah will relieve his hardship on the Day of
+              Resurrection."
+            </p>
+            <p className="mt-6 max-w-md text-base leading-relaxed text-ink/70">
+              We tracks every campaign from first naira to final delivery —
               nothing raised without a receipt, nothing spent without a record.
             </p>
             <div className="mt-8 flex items-center gap-4">
@@ -90,18 +92,16 @@ export default async function LandingPage() {
       {campaigns.length > 0 && (
         <section className="mx-auto max-w-6xl px-6 py-20">
           <div className="mb-8 flex items-baseline justify-between border-b border-ink/10 pb-4">
-            <h2 className="font-display text-2xl italic text-wine-900">
-              Live right now
-            </h2>
+            <h2 className="font-display text-2xl  text-wine-900">Live now</h2>
             <Link
               href="/campaigns"
-              className="font-mono text-xs uppercase tracking-wider text-sky-700 hover:text-sky-500"
+              className="font-mono text-xs uppercase tracking-wider text-paper hover:text-paper/90 bg-wine-500 p-3 font-semibold transition hover:bg-wine-700"
             >
-              View all →
+              View all
             </Link>
           </div>
 
-          <div className="grid gap-px bg-ink/10 sm:grid-cols-2 lg:grid-cols-4">
+          <div className="grid gap-px bg-ink/10 lg:grid-cols-4">
             {campaigns.map((c) => {
               const pct = Math.min(
                 100,
@@ -111,12 +111,16 @@ export default async function LandingPage() {
                 <Link
                   key={c.id}
                   href={`/campaigns/${c.slug}`}
-                  className="group bg-paper p-5 transition hover:bg-wine-50"
+                  className="group bg-paper p-5 transition hover:bg-wine-50 border border-ink/70"
                 >
+                  {c.image_url && (
+                    <Image src={c.image_url} height={100} width={200} alt="" />
+                  )}
+
                   <h3 className="font-display text-lg leading-snug text-ink group-hover:text-wine-700">
                     {c.title}
                   </h3>
-                  <div className="mt-4 h-1 w-full bg-ink/10">
+                  <div className="mt-4 h-0.5 w-full bg-ink/20">
                     <div
                       className="h-1 bg-sky-500"
                       style={{ width: `${pct}%` }}

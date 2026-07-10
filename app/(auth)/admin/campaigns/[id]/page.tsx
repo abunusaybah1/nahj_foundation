@@ -1,9 +1,8 @@
 // app/admin/campaigns/[id]/page.tsx
 import { notFound } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
-import CampaignForm from "../CampaignForm";
 import { updateCampaign, deleteCampaign } from "./actions";
-import DeleteCampaignButton from "./DeleteCampaignButton";
+import CampaignDetailView from "./CampaignDetailView";
 
 export const revalidate = 0;
 
@@ -43,9 +42,9 @@ export default async function EditCampaignPage({
   const canEdit = isOwner || isSuperAdmin;
 
   return (
-    <div className="max-w-2xl">
+    <div className="max-w-2xl p-8">
       <p className="font-mono text-xs uppercase tracking-[0.2em] text-wine-500">
-        {canEdit ? "Edit" : "View"}
+        {canEdit ? "Campaign" : "View"}
       </p>
       <h1 className="mt-2 font-display text-3xl italic text-wine-900">
         {campaign.title}
@@ -58,36 +57,20 @@ export default async function EditCampaignPage({
         </p>
       )}
 
-      {canEdit && (
-        <>
-          <div className="mt-8">
-            <CampaignForm
-              initial={{
-                id: campaign.id,
-                title: campaign.title,
-                story: campaign.story,
-                goal_amount: campaign.goal_amount,
-                image_url: campaign.image_url,
-                status: campaign.status as "draft" | "published" | "archived",
-              }}
-              onSubmit={(values) => updateCampaign(campaign.id, values)}
-              submitLabel="Save changes"
-            />
-          </div>
-
-          {isSuperAdmin && (
-            <div className="mt-10 border-t border-ink/10 pt-6">
-              <p className="mb-3 font-mono text-xs uppercase tracking-wide text-wine-500">
-                Super admin
-              </p>
-              <DeleteCampaignButton
-                campaignId={campaign.id}
-                onDelete={deleteCampaign}
-              />
-            </div>
-          )}
-        </>
-      )}
+      <CampaignDetailView
+        campaign={{
+          id: campaign.id,
+          title: campaign.title,
+          story: campaign.story,
+          goal_amount: campaign.goal_amount,
+          image_url: campaign.image_url,
+          status: campaign.status as "draft" | "published" | "archived",
+        }}
+        canEdit={canEdit}
+        isSuperAdmin={isSuperAdmin}
+        onSubmit={updateCampaign.bind(null, campaign.id)}
+        onDelete={deleteCampaign}
+      />
     </div>
   );
 }

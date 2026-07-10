@@ -63,8 +63,8 @@ export default function Navbar() {
             <Link href="/admin" className="hover:text-wine-500">
               Dashboard
             </Link>
-            <Link href="/admin/campaigns/new" className="hover:text-wine-500">
-              New campaign
+            <Link href="/admin/campaigns" className="hover:text-wine-500">
+              Campaigns
             </Link>
             {role === "super_admin" && (
               <Link href="/admin/sub-admins" className="hover:text-wine-500">

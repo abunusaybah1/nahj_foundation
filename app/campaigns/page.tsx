@@ -1,6 +1,7 @@
 // app/campaigns/page.tsx
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
+import Image from "next/image";
 
 export const revalidate = 60;
 
@@ -65,13 +66,16 @@ export default async function CampaignsPage() {
               className="group border border-ink/10 bg-paper transition hover:border-wine-500"
             >
               {c.image_url && (
-                <div
-                  className="h-44 w-full bg-paper-dim bg-cover bg-center grayscale-[15%] transition group-hover:grayscale-0"
-                  style={{ backgroundImage: `url(${c.image_url})` }}
+                <Image
+                  src={c.image_url}
+                  alt={c.title}
+                  className=" bg-paper-dim bg-center bg-cover grayscale-[15%] transition group-hover:grayscale-0"
+                  
+                  
                 />
               )}
               <div className="p-6">
-                <h2 className="font-display text-xl italic text-wine-900 group-hover:text-wine-500">
+                <h2 className="font-display text-xl  text-wine-900 group-hover:text-wine-500">
                   {c.title}
                 </h2>
                 <p className="mt-2 line-clamp-2 text-sm text-ink/60">

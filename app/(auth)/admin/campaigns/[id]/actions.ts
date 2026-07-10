@@ -41,7 +41,7 @@ export async function updateCampaign(
   }
 
   revalidatePath("/admin");
-  revalidatePath(`/admin/campaigns/${campaignId}`);
+  revalidatePath(`campaigns/${campaignId}`);
   return { success: true, redirectTo: `/admin/campaigns/${campaignId}` };
 }
 
