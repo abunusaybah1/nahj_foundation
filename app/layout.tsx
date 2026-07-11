@@ -2,6 +2,7 @@
 import type { Metadata } from "next";
 import { Fraunces, Archivo, IBM_Plex_Mono } from "next/font/google";
 import Navbar from "@/components/layout/Navbar";
+import ContactNav from "@/components/layout/ContactNav";
 import "./globals.css";
 
 const fraunces = Fraunces({
@@ -39,7 +40,7 @@ export default function RootLayout({
       <body
         className={`${fraunces.variable} ${archivo.variable} ${plexMono.variable} antialiased`}
       >
-        <Navbar /> 
+        <ContactNav /> 
         {children}
       </body>
     </html>
