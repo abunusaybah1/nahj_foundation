@@ -2,6 +2,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
+import ManualPaymentInfo from "@/components/ManualPaymentInfo";
 
 declare global {
   interface Window {
@@ -26,13 +27,13 @@ export default function DonationSheet({
   onClose: () => void;
   onDonationConfirmed: (amount: number) => void;
 }) {
+  const [mode, setMode] = useState<"online" | "manual">("online");
   const [step, setStep] = useState<Step>("amount");
   const [amount, setAmount] = useState<number | null>(5000);
   const [customAmount, setCustomAmount] = useState("");
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
-  // const [anonymous, setAnonymous] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [scriptReady, setScriptReady] = useState(
@@ -102,9 +103,7 @@ export default function DonationSheet({
           campaignSlug,
           amount: finalAmount,
           email,
-          // name: anonymous ? "Anonymous" : name,
           phone,
-          // anonymous,
         }),
       });
 
@@ -174,9 +173,10 @@ export default function DonationSheet({
         <div className="mx-auto mb-4 h-1 w-10 bg-ink/15 sm:hidden" />
 
         <div className="mb-5 flex items-center justify-between border-b border-ink/10 pb-4">
-          <p className="font-display text-lg ">
-            {step === "amount" && "Choose an amount"}
-            {step === "details" && "A few details..."}
+          <p className="font-display text-lg">
+            {mode === "online" && step === "amount" && "Choose an amount"}
+            {mode === "online" && step === "details" && "A few details..."}
+            {mode === "manual" && "Bank Transfer"}
             {step === "success" && "Thank you"}
           </p>
           <button
@@ -188,7 +188,34 @@ export default function DonationSheet({
           </button>
         </div>
 
-        {step === "amount" && (
+        {step !== "success" && (
+          <div className="mb-5 flex border-b border-ink/10">
+            <button
+              onClick={() => setMode("online")}
+              className={`flex-1 border-b-2 py-2.5 text-sm font-medium transition ${
+                mode === "online"
+                  ? "border-sky-500 text-sky-700"
+                  : "border-transparent text-ink/40 hover:text-ink/70"
+              }`}
+            >
+              Pay Online
+            </button>
+            <button
+              onClick={() => setMode("manual")}
+              className={`flex-1 border-b-2 py-2.5 text-sm font-medium transition ${
+                mode === "manual"
+                  ? "border-wine-500 text-wine-700"
+                  : "border-transparent text-ink/40 hover:text-ink/70"
+              }`}
+            >
+              Bank Transfer
+            </button>
+          </div>
+        )}
+
+        {mode === "manual" && step !== "success" && <ManualPaymentInfo />}
+
+        {mode === "online" && step === "amount" && (
           <div className="flex flex-col gap-5">
             <div className="grid grid-cols-2 gap-2">
               {PRESET_AMOUNTS.map((value) => {
@@ -243,7 +270,7 @@ export default function DonationSheet({
           </div>
         )}
 
-        {step === "details" && (
+        {mode === "online" && step === "details" && (
           <div className="flex flex-col gap-4">
             <label className="flex flex-col gap-1.5">
               <span className="font-mono text-xs uppercase tracking-wide text-ink">
@@ -262,13 +289,11 @@ export default function DonationSheet({
             <label className="flex flex-col gap-1.5">
               <span className="font-mono text-xs uppercase tracking-wide text-ink">
                 Full name
-                {/* {anonymous && "(hidden (giving anonymously)"} */}
               </span>
               <input
                 type="text"
                 required
                 value={name}
-                // disabled={anonymous}
                 onChange={(e) => setName(e.target.value)}
                 placeholder="Your name"
                 className="border border-ink/15 bg-transparent px-4 py-3 outline-none focus:border-sky-500 disabled:opacity-40"
@@ -287,16 +312,6 @@ export default function DonationSheet({
                 className="border border-ink/15 bg-transparent px-4 py-3 outline-none focus:border-sky-500"
               />
             </label>
-
-            {/* <label className="flex items-center gap-2 text-sm text-ink">
-              <input
-                type="checkbox"
-                checked={anonymous}
-                onChange={(e) => setAnonymous(e.target.checked)}
-                className="h-4 w-4 accent-wine-500"
-              />
-              Give anonymously
-            </label> */}
 
             {error && <p className="text-sm text-wine-500">{error}</p>}
 
@@ -330,7 +345,7 @@ export default function DonationSheet({
             <div className="flex h-12 w-12 items-center justify-center border border-sky-950 font-mono text-xl text-sky-950">
               ✓
             </div>
-            <p className="font-display text-xl ">
+            <p className="font-display text-xl">
               ₦{finalAmount.toLocaleString("en-NG")} received
             </p>
             <p className="text-sm text-ink/60">
