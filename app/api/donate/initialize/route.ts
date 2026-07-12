@@ -27,7 +27,7 @@ export async function POST(req: NextRequest) {
 
     const { data: campaign, error: campaignError } = await supabase
       .from("campaigns")
-      .select("id")
+      .select("id, status")
       .eq("slug", campaignSlug)
       .single();
 
@@ -35,6 +35,13 @@ export async function POST(req: NextRequest) {
       return NextResponse.json(
         { error: "Campaign not found." },
         { status: 404 },
+      );
+    }
+
+    if (campaign.status !== "published") {
+      return NextResponse.json(
+        { error: "This campaign isn't accepting donations right now." },
+        { status: 403 },
       );
     }
 

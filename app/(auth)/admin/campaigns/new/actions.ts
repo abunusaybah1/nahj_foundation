@@ -48,6 +48,7 @@ export async function createCampaign(values: {
     .single();
 
   if (error || !data) {
+    console.error("createCampaign failed:", error);
     return { error: "Could not create the campaign. Try again." };
   }
 

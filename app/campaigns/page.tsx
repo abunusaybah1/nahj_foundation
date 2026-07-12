@@ -1,9 +1,13 @@
 // app/campaigns/page.tsx
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
-import Image from "next/image";
 
 export const revalidate = 60;
+
+const STATUS_LABEL: Record<string, string> = {
+  published: "Live",
+  archived: "Closed",
+};
 
 function currency(n: number) {
   return new Intl.NumberFormat("en-NG", {
@@ -16,11 +20,16 @@ function currency(n: number) {
 export default async function CampaignsPage() {
   const supabase = await createClient();
 
-  // app/campaigns/page.tsx (relevant part only — rest unchanged)
+  // Both published and archived show up here — archived campaigns are
+  // closed to new donations but still visible with their final total,
+  // for transparency. Only drafts stay hidden (RLS enforces this
+  // regardless of what's queried here).
   const { data: campaigns } = await supabase
     .from("campaigns")
-    .select("id, slug, title, story, goal_amount, image_url, created_at")
-    .eq("status", "published")
+    .select(
+      "id, slug, title, story, goal_amount, image_url, status, created_at",
+    )
+    .in("status", ["published", "archived"])
     .order("created_at", { ascending: false });
 
   const raisedByCampaign = new Map<string, number>();
@@ -38,16 +47,16 @@ export default async function CampaignsPage() {
   return (
     <main className="mx-auto max-w-6xl px-6 py-16">
       <header className="mb-12 border-b border-ink/10 pb-8">
-        <p className="font-mono text-xs uppercase tracking-[0.2em] text-wine-500">
+        {/* <p className="font-mono text-xs uppercase tracking-[0.2em] text-wine-500">
           All campaigns
-        </p>
-        <h1 className="mt-3 font-display text-4xl italic text-wine-900 sm:text-5xl">
-          Every cause, tracked in the open
+        </p> */}
+        <h1 className="mt-3 font-display text-4xl text-wine-900 sm:text-5xl">
+          All campaigns
         </h1>
       </header>
 
       {(!campaigns || campaigns.length === 0) && (
-        <p className="text-ink/60">
+        <p className="border border-ink/10 bg-paper-dim p-6 text-ink/60 shadow-sm">
           No campaigns are live right now — check back soon.
         </p>
       )}
@@ -59,21 +68,34 @@ export default async function CampaignsPage() {
             100,
             Math.round((raised / Number(c.goal_amount)) * 100),
           );
+          const isClosed = c.status === "archived";
           return (
             <Link
               key={c.id}
               href={`/campaigns/${c.slug}`}
-              className="group border border-ink/10 bg-paper transition hover:border-wine-500"
+              className={`group border bg-paper shadow-sm transition ${
+                isClosed
+                  ? "border-ink/10 opacity-90 hover:opacity-100"
+                  : "border-ink/10 hover:border-wine-500"
+              }`}
             >
               {c.image_url && (
-                <Image
-                  src={c.image_url}
-                  alt={c.title}
-                  className=" bg-paper-dim bg-center bg-cover grayscale-[15%] transition group-hover:grayscale-0"
+                <div
+                  className="h-44 w-full bg-paper-dim bg-cover bg-center grayscale-[15%] transition group-hover:grayscale-0"
+                  style={{ backgroundImage: `url(${c.image_url})` }}
                 />
               )}
               <div className="p-6">
-                <h2 className="font-display text-xl  text-wine-900 group-hover:text-wine-500">
+                <span
+                  className={`border px-2 py-0.5 font-mono text-[10px] uppercase tracking-wider ${
+                    isClosed
+                      ? "border-ink/20 text-ink/50"
+                      : "border-sky-500/40 text-sky-700"
+                  }`}
+                >
+                  {STATUS_LABEL[c.status] ?? c.status}
+                </span>
+                <h2 className="mt-3 font-display text-xl italic text-wine-900 group-hover:text-wine-500">
                   {c.title}
                 </h2>
                 <p className="mt-2 line-clamp-2 text-sm text-ink/60">
@@ -81,7 +103,7 @@ export default async function CampaignsPage() {
                 </p>
                 <div className="mt-5 h-1 w-full bg-ink/10">
                   <div
-                    className="h-1 bg-sky-500"
+                    className={`h-1 ${isClosed ? "bg-ink/30" : "bg-sky-500"}`}
                     style={{ width: `${pct}%` }}
                   />
                 </div>

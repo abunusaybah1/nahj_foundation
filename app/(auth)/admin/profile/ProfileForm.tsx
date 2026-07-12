@@ -2,19 +2,23 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { updateProfile } from "./actions";
 
 export default function ProfileForm({
   fullName,
   email,
   phone,
-  role,
+  // role,
+  showContinue = false,
 }: {
   fullName: string;
   email: string;
   phone: string;
   role: string;
+  showContinue?: boolean;
 }) {
+  const router = useRouter();
   const [status, setStatus] = useState<"idle" | "saving" | "saved" | "error">(
     "idle",
   );
@@ -26,7 +30,10 @@ export default function ProfileForm({
   }
 
   return (
-    <form action={handleSubmit} className="mt-8 flex flex-col gap-4">
+    <form
+      action={handleSubmit}
+      className="mt-8 flex flex-col gap-4 border border-ink/10 bg-paper p-6 shadow-sm sm:p-8"
+    >
       <label className="flex flex-col gap-1.5">
         <span className="font-mono text-xs uppercase tracking-wide text-ink/50">
           Email
@@ -49,6 +56,7 @@ export default function ProfileForm({
         <input
           name="full_name"
           type="text"
+          required
           defaultValue={fullName}
           className="border border-ink/15 bg-transparent px-4 py-3 outline-none focus:border-sky-500"
         />
@@ -66,7 +74,7 @@ export default function ProfileForm({
         />
       </label>
 
-      <label className="flex flex-col gap-1.5">
+      {/* <label className="flex flex-col gap-1.5">
         <span className="font-mono text-xs uppercase tracking-wide text-ink/50">
           Role
         </span>
@@ -76,15 +84,27 @@ export default function ProfileForm({
           disabled
           className="border border-ink/10 bg-paper-dim px-4 py-3 text-ink/50 outline-none"
         />
-      </label>
+      </label> */}
 
-      <button
-        type="submit"
-        disabled={status === "saving"}
-        className="mt-2 self-start bg-wine-500 px-6 py-3 font-semibold text-paper transition hover:bg-wine-700 disabled:opacity-60"
-      >
-        {status === "saving" ? "Saving…" : "Save changes"}
-      </button>
+      <div className="mt-2 flex flex-wrap items-center gap-4">
+        <button
+          type="submit"
+          disabled={status === "saving"}
+          className="self-start bg-wine-500 px-6 py-3 font-semibold text-paper shadow-sm transition hover:bg-wine-700 disabled:opacity-60"
+        >
+          {status === "saving" ? "Saving…" : "Save changes"}
+        </button>
+
+        {status === "saved" && showContinue && (
+          <button
+            type="button"
+            onClick={() => router.push("/admin")}
+            className="border border-sky-500 px-6 py-3 font-semibold text-sky-700 shadow-sm transition hover:bg-sky-500 hover:text-paper"
+          >
+            Continue to dashboard →
+          </button>
+        )}
+      </div>
 
       {status === "saved" && <p className="text-sm text-sky-700">Saved.</p>}
       {status === "error" && (

@@ -19,7 +19,9 @@ export default async function CampaignDetailPage({
     .eq("slug", slug)
     .single();
 
-  if (!campaign || campaign.status !== "published") {
+  // Archived campaigns stay visible (closed, showing their final
+  // total) — only draft or nonexistent campaigns 404 for the public.
+  if (!campaign || !["published", "archived"].includes(campaign.status)) {
     notFound();
   }
 

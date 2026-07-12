@@ -3,7 +3,6 @@
 
 import { useState } from "react";
 import DonationSheet from "@/components/DonationSheet";
-import Image from "next/image";
 
 function currency(n: number) {
   return new Intl.NumberFormat("en-NG", {
@@ -12,6 +11,11 @@ function currency(n: number) {
     maximumFractionDigits: 0,
   }).format(n);
 }
+
+const STATUS_LABEL: Record<string, string> = {
+  published: "Active",
+  archived: "Closed",
+};
 
 export default function CampaignClient({
   campaign,
@@ -24,11 +28,13 @@ export default function CampaignClient({
     story: string;
     goal_amount: number;
     image_url: string | null;
+    status: string;
   };
   initialRaised: number;
 }) {
   const [raised, setRaised] = useState(initialRaised);
   const [sheetOpen, setSheetOpen] = useState(false);
+  const isClosed = campaign.status === "archived";
 
   const pct = Math.min(
     100,
@@ -37,20 +43,17 @@ export default function CampaignClient({
 
   return (
     <main className="mx-auto max-w-4xl px-6 py-16">
-      <p className="font-mono text-xs uppercase tracking-[0.2em] text-wine-500">
-        Active campaign
+      <p className="bg-sky-600 px-2 py-1 w-fit rounded-md  font-mono text-xs uppercase tracking-[0.2em] text-paper font-semibold">
+        {STATUS_LABEL[campaign.status] ?? campaign.status}
       </p>
       <h1 className="mt-3 font-display text-4xl  leading-tight text-wine-900 sm:text-5xl">
         {campaign.title}
       </h1>
 
       {campaign.image_url && (
-        <Image
-          src={campaign.image_url}
-          alt={campaign.title}
-          className="mt-8 h-fit w-full border border-ink/10 bg-cover bg-center"
-          width={600}
-          height={400}
+        <div
+          className="mt-8 h-72 w-full border border-ink/10 bg-cover bg-center shadow-sm"
+          style={{ backgroundImage: `url(${campaign.image_url})` }}
         />
       )}
 
@@ -59,7 +62,7 @@ export default function CampaignClient({
           {campaign.story}
         </p>
 
-        <aside className="h-fit border border-ink/10 p-5">
+        <aside className="h-fit border border-ink/10 bg-paper p-5 shadow-sm">
           <p className="font-mono text-2xl text-sky-700">{currency(raised)}</p>
           <p className="mt-1 text-xs text-ink/60">
             raised of {currency(Number(campaign.goal_amount))} goal
@@ -69,16 +72,22 @@ export default function CampaignClient({
           </div>
           <p className="mt-1 font-mono text-xs text-ink/50">{pct}% funded</p>
 
-          <button
-            onClick={() => setSheetOpen(true)}
-            className="mt-5 w-full bg-wine-500 px-4 py-3.5 font-semibold text-paper transition hover:bg-wine-700"
-          >
-            Donate now
-          </button>
+          {isClosed ? (
+            <p className="mt-5 border border-ink/10 bg-paper-dim px-4 py-3 text-center text-sm text-ink/60">
+              This campaign is closed and no longer accepting donations.
+            </p>
+          ) : (
+            <button
+              onClick={() => setSheetOpen(true)}
+              className="mt-5 w-full bg-wine-500 px-4 py-3.5 font-semibold text-paper shadow-sm transition hover:bg-wine-700"
+            >
+              Donate now
+            </button>
+          )}
         </aside>
       </div>
 
-      {sheetOpen && (
+      {sheetOpen && !isClosed && (
         <DonationSheet
           campaignSlug={campaign.slug}
           publicKey={process.env.NEXT_PUBLIC_PAYSTACK_PUBLIC_KEY!}

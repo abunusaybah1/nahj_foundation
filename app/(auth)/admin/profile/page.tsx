@@ -4,7 +4,12 @@ import ProfileForm from "./ProfileForm";
 
 export const revalidate = 0;
 
-export default async function ProfilePage() {
+export default async function ProfilePage({
+  searchParams,
+}: {
+  searchParams: Promise<{ welcome?: string }>;
+}) {
+  const { welcome } = await searchParams;
   const supabase = await createClient();
 
   const {
@@ -18,7 +23,7 @@ export default async function ProfilePage() {
     .single();
 
   return (
-    <div className="max-w-lg">
+    <div className="max-w-lg p-8">
       <p className="font-mono text-xs uppercase tracking-[0.2em] text-wine-500">
         Account
       </p>
@@ -26,11 +31,19 @@ export default async function ProfilePage() {
         Your profile
       </h1>
 
+      {welcome === "1" && (
+        <p className="mt-4 border border-sky-500/40 bg-sky-50 px-4 py-3 text-sm text-sky-700 shadow-sm">
+          Welcome! Add your name below to finish setting up your account before
+          continuing to your dashboard.
+        </p>
+      )}
+
       <ProfileForm
         fullName={profile?.full_name ?? ""}
-        email={profile?.email ?? ""}
+        email={profile?.email ?? user?.email ?? ""}
         phone={profile?.phone ?? ""}
         role={profile?.role ?? "sub_admin"}
+        showContinue={welcome === "1"}
       />
     </div>
   );

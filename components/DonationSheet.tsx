@@ -35,20 +35,33 @@ export default function DonationSheet({
   // const [anonymous, setAnonymous] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [scriptReady, setScriptReady] = useState(false);
+  const [scriptReady, setScriptReady] = useState(
+    () => typeof window !== "undefined" && !!window.PaystackPop,
+  );
 
   useEffect(() => {
-    if (document.getElementById("paystack-inline-script")) {
-      setScriptReady(true);
-      return;
+    if (scriptReady) return;
+
+    const existing = document.getElementById(
+      "paystack-inline-script",
+    ) as HTMLScriptElement | null;
+
+    if (existing) {
+      // A previous mount already added the tag (e.g. React Strict
+      // Mode's double-invoke) — wait for ITS load event instead of
+      // creating a duplicate script.
+      const onLoad = () => setScriptReady(true);
+      existing.addEventListener("load", onLoad);
+      return () => existing.removeEventListener("load", onLoad);
     }
+
     const script = document.createElement("script");
     script.id = "paystack-inline-script";
     script.src = "https://js.paystack.co/v1/inline.js";
     script.async = true;
     script.onload = () => setScriptReady(true);
     document.body.appendChild(script);
-  }, []);
+  }, [scriptReady]);
 
   const finalAmount = useMemo(() => {
     if (customAmount) {
@@ -321,7 +334,8 @@ export default function DonationSheet({
               ₦{finalAmount.toLocaleString("en-NG")} received
             </p>
             <p className="text-sm text-ink/60">
-              A receipt has been sent to {email}. May Allah bless you for your generosity.
+              A receipt has been sent to {email}. May Allah bless you for your
+              generosity.
             </p>
             <button
               onClick={onClose}

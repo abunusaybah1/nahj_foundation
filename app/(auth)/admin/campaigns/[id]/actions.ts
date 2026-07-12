@@ -45,6 +45,50 @@ export async function updateCampaign(
   return { success: true, redirectTo: `/admin/campaigns/${campaignId}` };
 }
 
+export async function recordManualDonation(
+  campaignId: string,
+  values: {
+    donor_name: string;
+    donor_email: string;
+    amount: number;
+    anonymous: boolean;
+  },
+) {
+  const supabase = await createClient();
+
+  if (!Number.isFinite(values.amount) || values.amount <= 0) {
+    return { error: "Enter an amount greater than zero." };
+  }
+
+  // RLS enforces that this insert only succeeds for a campaign the
+  // caller owns (or if they're super_admin) — see
+  // "Admins can record manual donations" in supabase/fixes-manual-donations.sql.
+  const { error } = await supabase.from("donations").insert({
+    campaign_id: campaignId,
+    reference: `manual_${crypto.randomUUID().replace(/-/g, "")}`,
+    donor_name: values.anonymous ? "Anonymous" : values.donor_name || null,
+    donor_email: values.donor_email || null,
+    anonymous: values.anonymous,
+    amount: values.amount,
+    status: "success",
+    channel: "manual",
+  });
+
+  if (error) {
+    console.error("recordManualDonation failed:", error);
+    return {
+      error:
+        "Could not record this donation — make sure you own this campaign.",
+    };
+  }
+
+  revalidatePath(`/admin/campaigns/${campaignId}`);
+  revalidatePath("/admin");
+  revalidatePath("/");
+  revalidatePath("/campaigns");
+  return { success: true };
+}
+
 export async function deleteCampaign(campaignId: string) {
   const supabase = await createClient();
 

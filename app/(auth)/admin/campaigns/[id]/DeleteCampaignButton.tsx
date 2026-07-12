@@ -19,7 +19,7 @@ export default function DeleteCampaignButton({
     return (
       <button
         onClick={() => setConfirming(true)}
-        className="border border-wine-500 px-4 py-2 text-sm font-medium text-wine-500 hover:bg-wine-500 hover:text-paper"
+        className="border bg-wine-500 px-4 py-2 text-sm font-medium text-paper hover:bg-wine-700"
       >
         Delete this campaign
       </button>

@@ -35,6 +35,7 @@ export default function CampaignDetailView({
   isSuperAdmin,
   onSubmit,
   onDelete,
+  // raised,
 }: {
   campaign: Campaign;
   canEdit: boolean;
@@ -47,6 +48,7 @@ export default function CampaignDetailView({
     status: "draft" | "published" | "archived";
   }) => Promise<{ error?: string; success?: boolean; redirectTo?: string }>;
   onDelete: (id: string) => Promise<{ error?: string; success?: boolean }>;
+  // raised: number;
 }) {
   const router = useRouter();
   const [editing, setEditing] = useState(false);
@@ -64,9 +66,9 @@ export default function CampaignDetailView({
       <div className="mt-8">
         <button
           onClick={() => setEditing(false)}
-          className="mb-6 text-sm text-ink/50 hover:text-ink"
+          className="mb-6 text-sm font-medium text-pink-950 hover:text-ink"
         >
-          ← Back without saving
+          x Cancel edit
         </button>
         <CampaignForm
           initial={{
@@ -88,7 +90,7 @@ export default function CampaignDetailView({
   return (
     <div className="mt-8 flex flex-col gap-6">
       {justSaved && (
-        <p className="border border-sky-500/40 bg-sky-50 px-4 py-3 text-sm text-sky-700 shadow-sm">
+        <p className="border border-sky-500/40 bg-sky-950 px-4 py-3 text-sm text-paper shadow-sm">
           Changes saved.
         </p>
       )}
@@ -125,26 +127,32 @@ export default function CampaignDetailView({
           <p className="mt-1">{STATUS_LABEL[campaign.status]}</p>
         </div>
       </div>
+      <h2 className="mt-2 text-sky-950 font-bold text-lg">Admin actions</h2>
+      <div className="border -mt-4 border-ink/10 bg-paper p-6 shadow-sm">
+        <p>
+          Admins can edit their own campaigns, while only super admins have
+          additional privileges such as editing and deleting campaigns.
+        </p>
+        {canEdit && (
+          <div className="flex gap-3 pt-6">
+            <button
+              onClick={() => setEditing(true)}
+              className="border border-wine-500 px-4 py-2 text-sm font-medium text-wine-500 shadow-sm transition hover:bg-wine-500 hover:text-paper"
+            >
+              Edit campaign
+            </button>
+          </div>
+        )}
 
-      {canEdit && (
-        <div className="flex gap-3 border-t border-ink/10 pt-6">
-          <button
-            onClick={() => setEditing(true)}
-            className="border border-wine-500 px-4 py-2 text-sm font-medium text-wine-500 shadow-sm transition hover:bg-wine-500 hover:text-paper"
-          >
-            Edit campaign
-          </button>
-        </div>
-      )}
-
-      {isSuperAdmin && (
-        <div className="border-t border-ink/10 pt-6">
-          <p className="mb-3 font-mono text-xs uppercase tracking-wide text-wine-500">
-            Super admin
-          </p>
-          <DeleteCampaignButton campaignId={campaign.id} onDelete={onDelete} />
-        </div>
-      )}
+        {isSuperAdmin && (
+          <div className="pt-6">
+            <DeleteCampaignButton
+              campaignId={campaign.id}
+              onDelete={onDelete}
+            />
+          </div>
+        )}
+      </div>
     </div>
   );
 }

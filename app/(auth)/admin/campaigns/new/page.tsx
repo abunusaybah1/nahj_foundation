@@ -1,10 +1,13 @@
 // app/admin/campaigns/new/page.tsx
 "use client";
 
+import { useRouter } from "next/navigation";
 import CampaignForm from "../CampaignForm";
 import { createCampaign } from "./actions";
 
 export default function NewCampaignPage() {
+  const router = useRouter();
+
   return (
     <div className="max-w-2xl">
       <p className="font-mono text-xs uppercase tracking-[0.2em] text-wine-500">
@@ -25,6 +28,11 @@ export default function NewCampaignPage() {
           }}
           onSubmit={createCampaign}
           submitLabel="Create campaign"
+          savedLabel="Created! Taking you to your campaign…"
+          onSaved={(redirectTo) => {
+            router.push(redirectTo ?? "/admin");
+            router.refresh();
+          }}
         />
       </div>
     </div>
