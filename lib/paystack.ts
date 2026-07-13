@@ -55,10 +55,12 @@ export async function verifyTransaction(reference: string) {
   if (!res.ok || !data.status) {
     throw new Error(data?.message ?? "Failed to verify Paystack transaction.");
   }
+  // in verifyTransaction, update the return type to include fees:
   return data.data as {
     status: "success" | "failed" | "abandoned";
     reference: string;
     amount: number;
+    fees: number; // add this line
     customer: { email: string };
     metadata?: Record<string, unknown>;
   };

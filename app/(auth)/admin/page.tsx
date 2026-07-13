@@ -147,11 +147,11 @@ export default async function AdminDashboardPage() {
     <div className="flex flex-col gap-12 p-8">
       <header className="flex flex-wrap items-center justify-between gap-4 border-b border-ink/10 pb-6">
         <div>
-          <p className="font-mono text-xs uppercase tracking-[0.2em] text-wine-500">
+          {/* <p className="font-mono text-xs uppercase tracking-[0.2em] text-wine-500">
             Dashboard
-          </p>
-          <h1 className="mt-2 font-display text-3xl italic text-wine-900">
-            Your campaigns
+          </p> */}
+          <h1 className="mt-2 font-display text-3xl text-wine-900">
+            Dashboard
           </h1>
         </div>
         <Link
@@ -166,13 +166,13 @@ export default async function AdminDashboardPage() {
         {myCampaigns.length === 0 ? (
           <div className="border border-wine-500/30 bg-wine-50 p-8 shadow-sm">
             <p className="text-ink/80">
-              You haven&apos;t created a campaign yet.{" "}
-              <Link
+              You haven&apos;t created a campaign yet.
+              {/* <Link
                 href="/admin/campaigns/new"
-                className="text-wine-500 underline"
+                className="text-wine-500"
               >
                 Create your first one
-              </Link>
+              </Link> */}
               .
             </p>
           </div>
@@ -186,7 +186,7 @@ export default async function AdminDashboardPage() {
       </section>
 
       <section>
-        <h2 className="mb-4 border-b border-ink/10 pb-3 font-display text-xl italic text-wine-900">
+        <h2 className="mb-4 border-b border-ink/10 pb-3 font-display text-xl  text-wine-900">
           Other admins&apos; campaigns
         </h2>
         {otherCampaigns.length === 0 ? (

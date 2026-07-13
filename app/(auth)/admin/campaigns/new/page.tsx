@@ -9,11 +9,8 @@ export default function NewCampaignPage() {
   const router = useRouter();
 
   return (
-    <div className="max-w-2xl">
-      <p className="font-mono text-xs uppercase tracking-[0.2em] text-wine-500">
-        New
-      </p>
-      <h1 className="mt-2 font-display text-3xl italic text-wine-900">
+    <div className="max-w-2xl p-8">
+      <h1 className="mt-2 font-display text-3xl  text-wine-900">
         Create a campaign
       </h1>
 

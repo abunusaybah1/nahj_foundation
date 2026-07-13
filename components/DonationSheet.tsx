@@ -48,9 +48,6 @@ export default function DonationSheet({
     ) as HTMLScriptElement | null;
 
     if (existing) {
-      // A previous mount already added the tag (e.g. React Strict
-      // Mode's double-invoke) — wait for ITS load event instead of
-      // creating a duplicate script.
       const onLoad = () => setScriptReady(true);
       existing.addEventListener("load", onLoad);
       return () => existing.removeEventListener("load", onLoad);
@@ -194,8 +191,8 @@ export default function DonationSheet({
               onClick={() => setMode("online")}
               className={`flex-1 border-b-2 py-2.5 text-sm font-medium transition ${
                 mode === "online"
-                  ? "border-sky-500 text-sky-700"
-                  : "border-transparent text-ink/40 hover:text-ink/70"
+                  ? "border-wine-500 text-wine-700"
+                  : "border-transparent text-ink/80 hover:text-ink/70"
               }`}
             >
               Pay Online
@@ -205,7 +202,7 @@ export default function DonationSheet({
               className={`flex-1 border-b-2 py-2.5 text-sm font-medium transition ${
                 mode === "manual"
                   ? "border-wine-500 text-wine-700"
-                  : "border-transparent text-ink/40 hover:text-ink/70"
+                  : "border-transparent text-ink/80 hover:text-ink/70"
               }`}
             >
               Bank Transfer

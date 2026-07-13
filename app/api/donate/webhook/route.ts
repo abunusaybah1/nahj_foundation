@@ -33,6 +33,10 @@ export async function POST(req: NextRequest) {
   if (event.event === "charge.success") {
     const reference = event.data?.reference;
     const amountKobo = event.data?.amount;
+    // Paystack's actual fee for this transaction, in kobo. Present on
+    // charge.success — this is what they actually deducted, so it's
+    // more reliable than us recalculating their fee formula ourselves.
+    const feeKobo = event.data?.fees ?? 0;
 
     if (reference) {
       const supabase = createServiceClient();
@@ -48,7 +52,10 @@ export async function POST(req: NextRequest) {
         if (amountKobo === expectedKobo) {
           await supabase
             .from("donations")
-            .update({ status: "success" })
+            .update({
+              status: "success",
+              fee: feeKobo / 100,
+            })
             .eq("reference", reference);
         } else {
           console.error(
