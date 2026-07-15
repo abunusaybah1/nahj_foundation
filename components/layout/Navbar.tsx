@@ -5,6 +5,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { createClient } from "@/lib/supabase/client";
 import { CgClose } from "react-icons/cg";
+import Image from "next/image";
 
 type Role = "super_admin" | "sub_admin" | null;
 
@@ -59,7 +60,6 @@ export default function Navbar() {
     };
   }, [pathname]);
 
-
   useEffect(() => {
     function handleClick(e: MouseEvent) {
       if (menuRef.current && !menuRef.current.contains(e.target as Node)) {
@@ -69,7 +69,6 @@ export default function Navbar() {
     document.addEventListener("mousedown", handleClick);
     return () => document.removeEventListener("mousedown", handleClick);
   }, []);
-
 
   async function handleLogout() {
     const supabase = createClient();
@@ -95,29 +94,42 @@ export default function Navbar() {
 
   return (
     <header className="sticky top-0 z-40 border-b border-ink/10 bg-paper/95 backdrop-blur">
-      <nav className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
-        <Link href="/" className="font-display text-lg text-wine-900">
-          Nahj Foundation
+      <nav className="mx-auto flex max-w-6xl items-center justify-between px-6 py-2">
+        <Link href="/" className="font-display text-lg text-crimson-darker">
+          <Image
+            src="/images/trans-darkbg.png"
+            alt="Nahj Foundation"
+            width={64}
+            height={64}
+            loading="eager"
+          />
         </Link>
 
-        {/* Desktop nav */}
         <div className="hidden items-center gap-6 text-sm text-ink/70 sm:flex">
           <Link
             href={primaryHref}
-            className={primaryActive ? "text-sky-700" : "hover:text-sky-700"}
+            className={
+              primaryActive
+                ? "text-crimson-darker"
+                : "hover:text-crimson-darker"
+            }
           >
             {primaryLabel}
           </Link>
           <Link
             href={campaignsHref}
-            className={campaignsActive ? "text-sky-700" : "hover:text-sky-700"}
+            className={
+              campaignsActive ? "text-crimson-darker" : "hover:text-crimson"
+            }
           >
             Campaigns
           </Link>
           <Link
             href="/contact"
             className={
-              pathname === "/contact" ? "text-sky-700" : "hover:text-sky-700"
+              pathname === "/contact"
+                ? "text-crimson-darker"
+                : "hover:text-crimson-darker"
             }
           >
             Contact Us
@@ -128,7 +140,7 @@ export default function Navbar() {
               <div className="relative" ref={menuRef}>
                 <button
                   onClick={() => setMenuOpen((v) => !v)}
-                  className="flex items-center gap-2 border bg-ink py-1.5 pl-1.5 pr-3 text-paper hover:border-wine-500"
+                  className="flex items-center gap-2 border bg-ink py-1.5 pl-1.5 pr-3 text-paper hover:border-crimson"
                 >
                   <span className="flex h-6 w-6 items-center justify-center rounded-full bg-paper text-xs font-semibold text-ink">
                     {initial}
@@ -150,7 +162,7 @@ export default function Navbar() {
                     <div className="py-1">
                       {role === "super_admin" && (
                         <Link
-                          href="/admin/sub-admins"
+                          href="/admin/admins"
                           className="block px-4 py-2 text-sm text-ink/80 hover:bg-paper-dim"
                         >
                           Admins
@@ -167,7 +179,7 @@ export default function Navbar() {
                     <div className="border-t border-ink/10 py-1">
                       <button
                         onClick={handleLogout}
-                        className="block w-full px-4 py-2 text-left text-sm text-wine-600 hover:bg-wine-500/5"
+                        className="block w-full px-4 py-2 text-left text-sm text-crimson hover:bg-crimson/5"
                       >
                         Log out
                       </button>
@@ -178,7 +190,7 @@ export default function Navbar() {
             ) : (
               <Link
                 href="/admin/login"
-                className="border border-sky-500/40 px-4 py-1.5 hover:border-sky-500"
+                className="border border-crimson/40 px-4 py-1.5 hover:border-crimson"
               >
                 Admin login
               </Link>
@@ -200,7 +212,7 @@ export default function Navbar() {
       {mobileOpen && (
         <div className="fixed inset-0 z-50 flex flex-col bg-paper sm:hidden">
           <div className="flex items-center justify-between border-b border-ink/10 px-6 py-4">
-            <span className="font-display text-lg text-wine-900">
+            <span className="font-display text-lg text-crimson-darker">
               Nahj Foundation
             </span>
             <CgClose
@@ -227,7 +239,7 @@ export default function Navbar() {
                 href={primaryHref}
                 onClick={() => setMobileOpen(false)}
                 className={`border-b border-ink/10 py-4 text-lg ${
-                  primaryActive ? "text-sky-700" : "text-ink"
+                  primaryActive ? "text-crimson-darker" : "text-ink"
                 }`}
               >
                 {primaryLabel}
@@ -236,7 +248,7 @@ export default function Navbar() {
                 href={campaignsHref}
                 onClick={() => setMobileOpen(false)}
                 className={`border-b border-ink/10 py-4 text-lg ${
-                  campaignsActive ? "text-sky-700" : "text-ink"
+                  campaignsActive ? "text-crimson-darker" : "text-ink"
                 }`}
               >
                 Campaigns
@@ -244,7 +256,7 @@ export default function Navbar() {
 
               {isAdminUser && role === "super_admin" && (
                 <Link
-                  href="/admin/sub-admins"
+                  href="/admin/admins"
                   onClick={() => setMobileOpen(false)}
                   className="border-b border-ink/10 py-4 text-lg text-ink"
                 >
@@ -264,7 +276,7 @@ export default function Navbar() {
                 href="/contact"
                 onClick={() => setMobileOpen(false)}
                 className={`border-b border-ink/10 py-4 text-lg ${
-                  pathname === "/contact" ? "text-sky-700" : "text-ink"
+                  pathname === "/contact" ? "text-crimson-darker" : "text-ink"
                 }`}
               >
                 Contact Us
@@ -275,7 +287,7 @@ export default function Navbar() {
               {!checked ? null : isAdminUser ? (
                 <button
                   onClick={handleLogout}
-                  className="w-full border border-wine-500 py-3 text-sm font-semibold text-wine-600"
+                  className="w-full border border-crimson py-3 text-sm font-semibold text-crimson"
                 >
                   Log out
                 </button>
@@ -283,7 +295,7 @@ export default function Navbar() {
                 <Link
                   href="/admin/login"
                   onClick={() => setMobileOpen(false)}
-                  className="block w-full border border-sky-500/40 py-3 text-center text-sm hover:border-sky-500"
+                  className="block w-full border border-crimson/40 py-3 text-center text-sm hover:border-crimson"
                 >
                   Admin login
                 </Link>

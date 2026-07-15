@@ -15,8 +15,8 @@ type Donation = {
 
 const STATUS_STYLE: Record<Donation["status"], string> = {
   pending: "border-ink/20 text-ink/50",
-  success: "border-sky-500/40 text-sky-700",
-  failed: "border-wine-500/40 text-wine-500",
+  success: "border-crimson/40 text-crimson-darker",
+  failed: "border-crimson/40 text-crimson",
 };
 
 const PAGE_SIZE = 10;
@@ -112,7 +112,7 @@ function DonationRow({
             <input
               value={donorName}
               onChange={(e) => setDonorName(e.target.value)}
-              className="border border-ink/15 bg-paper px-3 py-2 text-sm outline-none focus:border-sky-500"
+              className="border border-ink/15 bg-paper px-3 py-2 text-sm outline-none focus:border-crimson"
             />
           </label>
           <label className="flex flex-1 flex-col gap-1">
@@ -120,7 +120,7 @@ function DonationRow({
             <input
               value={donorEmail}
               onChange={(e) => setDonorEmail(e.target.value)}
-              className="border border-ink/15 bg-paper px-3 py-2 text-sm outline-none focus:border-sky-500"
+              className="border border-ink/15 bg-paper px-3 py-2 text-sm outline-none focus:border-crimson"
             />
           </label>
         </div>
@@ -132,7 +132,7 @@ function DonationRow({
               min={1}
               value={amount}
               onChange={(e) => setAmount(e.target.value)}
-              className="border border-ink/15 bg-paper px-3 py-2 font-mono text-sm outline-none focus:border-sky-500"
+              className="border border-ink/15 bg-paper px-3 py-2 font-mono text-sm outline-none focus:border-crimson"
             />
           </label>
           <label className="flex flex-1 flex-col gap-1">
@@ -140,7 +140,7 @@ function DonationRow({
             <select
               value={status}
               onChange={(e) => setStatus(e.target.value as Donation["status"])}
-              className="border border-ink/15 bg-paper px-3 py-2 text-sm outline-none focus:border-sky-500"
+              className="border border-ink/15 bg-paper px-3 py-2 text-sm outline-none focus:border-crimson"
             >
               <option value="pending">Pending</option>
               <option value="success">Success</option>
@@ -149,7 +149,7 @@ function DonationRow({
           </label>
         </div>
 
-        {error && <p className="text-sm text-wine-500">{error}</p>}
+        {error && <p className="text-sm text-crimson">{error}</p>}
 
         <div className="flex gap-2">
           <button
@@ -161,14 +161,14 @@ function DonationRow({
           <button
             onClick={handleSave}
             disabled={submitting}
-            className="bg-sky-500 px-3 py-1.5 text-xs font-semibold text-paper hover:bg-sky-700 disabled:opacity-60"
+            className="bg-crimson px-3 py-1.5 text-xs font-semibold text-paper hover:bg-crimson-darker disabled:opacity-60"
           >
             {submitting ? "Saving…" : "Save"}
           </button>
           <button
             onClick={handleDelete}
             disabled={submitting}
-            className="ml-auto border border-wine-500/40 px-3 py-1.5 text-xs text-wine-500 hover:bg-wine-500 hover:text-paper disabled:opacity-60"
+            className="ml-auto border border-crimson/40 px-3 py-1.5 text-xs text-crimson hover:bg-crimson hover:text-paper disabled:opacity-60"
           >
             Remove
           </button>
@@ -273,7 +273,7 @@ export default function DonationsList({
             <button
               onClick={() => setPage((p) => Math.max(1, p - 1))}
               disabled={safePage === 1}
-              className="text-xs text-sky-700 hover:underline disabled:cursor-default disabled:text-ink/30 disabled:hover:no-underline"
+              className="text-xs text-crimson-darker hover:underline disabled:cursor-default disabled:text-ink/30 disabled:hover:no-underline"
             >
               Prev
             </button>
@@ -283,7 +283,7 @@ export default function DonationsList({
             <button
               onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
               disabled={safePage === totalPages}
-              className="text-xs text-sky-700 hover:underline disabled:cursor-default disabled:text-ink/30 disabled:hover:no-underline"
+              className="text-xs text-crimson-darker hover:underline disabled:cursor-default disabled:text-ink/30 disabled:hover:no-underline"
             >
               Next
             </button>

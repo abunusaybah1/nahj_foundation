@@ -42,10 +42,10 @@ export default function CampaignClient({
 
   return (
     <main className="mx-auto max-w-4xl px-6 py-16">
-      <p className="bg-sky-600 px-2 py-1 w-fit rounded-md  font-mono text-xs uppercase tracking-[0.2em] text-paper font-semibold">
+      <p className="bg-crimson-600 px-2 py-1 w-fit rounded-md  font-mono text-xs uppercase tracking-[0.2em] text-paper font-semibold">
         {STATUS_LABEL[campaign.status] ?? campaign.status}
       </p>
-      <h1 className="mt-3 font-display text-4xl  leading-tight text-wine-900 sm:text-5xl">
+      <h1 className="mt-3 font-display text-4xl  leading-tight text-crimson-darker sm:text-5xl">
         {campaign.title}
       </h1>
 
@@ -62,12 +62,14 @@ export default function CampaignClient({
         </p>
 
         <aside className="h-fit border border-ink/10 bg-paper p-5 shadow-sm">
-          <p className="font-mono text-2xl text-sky-700">{currency(raised)}</p>
+          <p className="font-mono text-2xl text-crimson-darker">
+            {currency(raised)}
+          </p>
           <p className="mt-1 text-xs text-ink/60">
             raised of {currency(Number(campaign.goal_amount))} goal
           </p>
           <div className="mt-4 h-1 w-full bg-ink/10">
-            <div className="h-1 bg-sky-500" style={{ width: `${pct}%` }} />
+            <div className="h-1 bg-crimson" style={{ width: `${pct}%` }} />
           </div>
           <p className="mt-1 font-mono text-xs text-ink/50">{pct}% funded</p>
 
@@ -78,7 +80,7 @@ export default function CampaignClient({
           ) : (
             <button
               onClick={() => setSheetOpen(true)}
-              className="mt-5 w-full bg-wine-500 px-4 py-3.5 font-semibold text-paper shadow-sm transition hover:bg-wine-700"
+              className="mt-5 w-full bg-crimson px-4 py-3.5 font-semibold text-paper shadow-sm transition hover:bg-crimson"
             >
               Donate now
             </button>

@@ -9,7 +9,7 @@ export default function NewCampaignPage() {
 
   return (
     <div className="max-w-2xl p-8">
-      <h1 className="mt-2 font-display text-3xl  text-wine-900">
+      <h1 className="mt-2 font-display text-3xl  text-crimson-darker">
         Create a campaign
       </h1>
 

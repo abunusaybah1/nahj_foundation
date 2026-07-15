@@ -46,8 +46,7 @@ export default function ContactPage() {
 
   return (
     <main className="mx-auto max-w-xl px-6 py-16">
-      
-      <h1 className="mt-3 font-display text-3xl  text-wine-900 sm:text-4xl">
+      <h1 className="mt-3 font-display text-3xl  text-crimson-darker sm:text-4xl">
         Contact Us
       </h1>
       <p className="mt-4 leading-relaxed text-ink/70">
@@ -57,9 +56,12 @@ export default function ContactPage() {
 
       {status === "sent" ? (
         <div className="mt-10 border border-ink/10 bg-paper-dim px-6 py-8 text-center">
-          <p className="font-display text-lg text-wine-900">Message sent</p>
+          <p className="font-display text-lg text-crimson-darker">
+            Message sent
+          </p>
           <p className="mt-2 text-sm text-ink/60">
-            Thanks for reaching out — we&apos;ll reply to your email soon, God willing.
+            Thanks for reaching out — we&apos;ll reply to your email soon, God
+            willing.
           </p>
         </div>
       ) : (
@@ -70,7 +72,7 @@ export default function ContactPage() {
             required
             value={name}
             onChange={(e) => setName(e.target.value)}
-            className="border border-ink/15 bg-transparent px-4 py-3 text-sm outline-none focus:border-sky-500"
+            className="border border-ink/15 bg-transparent px-4 py-3 text-sm outline-none focus:border-crimson"
           />
           <input
             type="email"
@@ -78,7 +80,7 @@ export default function ContactPage() {
             required
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            className="border border-ink/15 bg-transparent px-4 py-3 text-sm outline-none focus:border-sky-500"
+            className="border border-ink/15 bg-transparent px-4 py-3 text-sm outline-none focus:border-crimson"
           />
           <textarea
             placeholder="Your message"
@@ -86,15 +88,15 @@ export default function ContactPage() {
             rows={5}
             value={message}
             onChange={(e) => setMessage(e.target.value)}
-            className="border border-ink/15 bg-transparent px-4 py-3 text-sm outline-none focus:border-sky-500"
+            className="border border-ink/15 bg-transparent px-4 py-3 text-sm outline-none focus:border-crimson"
           />
 
-          {error && <p className="text-sm text-wine-600">{error}</p>}
+          {error && <p className="text-sm text-crimson">{error}</p>}
 
           <button
             type="submit"
             disabled={status === "sending"}
-            className="bg-wine-500 px-4 py-3.5 text-center font-semibold text-paper transition hover:bg-wine-700 disabled:opacity-60"
+            className="bg-crimson px-4 py-3.5 text-center font-semibold text-paper transition hover:bg-crimson disabled:opacity-60"
           >
             {status === "sending" ? "Sending…" : "Send message"}
           </button>
@@ -105,7 +107,7 @@ export default function ContactPage() {
         href={`https://wa.me/${WHATSAPP_NUMBER}`}
         target="_blank"
         rel="noopener noreferrer"
-        className="mt-6 flex items-center justify-center gap-3 border border-wine-500 px-5 py-4 text-sm text-ink/70 hover:bg-wine-500 hover:text-paper transition"
+        className="mt-6 flex items-center justify-center gap-3 border border-crimson px-5 py-4 text-sm text-ink/70 hover:bg-crimson hover:text-paper transition"
       >
         <svg
           width="20"

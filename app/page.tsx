@@ -10,12 +10,11 @@ const STATUS_LABEL: Record<string, string> = {
 };
 
 const STATUS_BADGE_STYLE: Record<string, string> = {
-  published: "border-sky-500/40 text-sky-700",
-  archived: "border-wine-500/40 text-wine-500",
+  published: "border-crimson/40 text-crimson-darker",
+  archived: "border-crimson/40 text-crimson",
 };
 
 async function getFeaturedCampaigns() {
-
   const supabase = await createClient();
 
   const { data: campaigns } = await supabase
@@ -56,11 +55,11 @@ export default async function LandingPage() {
 
   return (
     <main className="bg-paper text-ink">
-      <section className="relative overflow-hidden border-b border-wine-500/15">
+      <section className="relative overflow-hidden border-b border-crimson/15">
         <div className="absolute inset-0 texture-dots" aria-hidden />
         <div className="relative mx-auto grid max-w-6xl gap-10 px-6 py-20 sm:py-28 lg:grid-cols-[1.3fr_0.7fr] lg:items-end">
           <div>
-            <h1 className="font-display max-w-md text-5xl leading-[1.05] tracking-tight text-wine-900 sm:text-6xl">
+            <h1 className="font-display max-w-md text-5xl leading-[1.05] tracking-tight text-crimson-darker sm:text-6xl">
               Be the reason someone smiles again
             </h1>
             <p className="mt-6 max-w-md text-base leading-relaxed text-ink/70">
@@ -71,15 +70,15 @@ export default async function LandingPage() {
             <div className="mt-8 flex items-center gap-4">
               <Link
                 href="/campaigns"
-                className="border border-wine-500 bg-wine-500 px-6 py-3 font-body text-sm font-semibold text-paper transition hover:bg-wine-700"
+                className="border border-crimson bg-crimson px-6 py-3 font-body text-sm font-semibold text-paper transition hover:bg-crimson"
               >
                 Browse campaigns
               </Link>
             </div>
           </div>
 
-          <div className="border-l-2 border-wine-500 pl-6">
-            <p className="font-mono text-4xl font-medium text-wine-700 sm:text-5xl">
+          <div className="border-l-2 border-crimson pl-6">
+            <p className="font-mono text-4xl font-medium text-crimson sm:text-5xl">
               <CountUp value={totalRaised} />
             </p>
             <p className="mt-2 text-sm text-ink/60">
@@ -92,10 +91,12 @@ export default async function LandingPage() {
       {campaigns.length > 0 && (
         <section className="mx-auto max-w-6xl px-6 py-20">
           <div className="mb-8 flex items-baseline justify-between border-b border-ink/10 pb-4">
-            <h2 className="font-display text-2xl text-wine-900">Live now</h2>
+            <h2 className="font-display text-2xl text-crimson-darker">
+              Active campaigns
+            </h2>
             <Link
               href="/campaigns"
-              className="bg-wine-500 p-3 font-mono text-xs font-semibold uppercase tracking-wider text-paper transition hover:bg-wine-700 hover:text-paper/90"
+              className="bg-crimson p-3 font-mono text-xs font-semibold uppercase tracking-wider text-paper transition hover:bg-crimson hover:text-paper/90"
             >
               View all
             </Link>
@@ -111,7 +112,7 @@ export default async function LandingPage() {
                 <Link
                   key={c.id}
                   href={`/campaigns/${c.slug}`}
-                  className="group border border-ink/10 bg-paper shadow-sm transition hover:border-wine-500 hover:shadow-md"
+                  className="group border border-ink/10 bg-paper shadow-sm transition hover:border-crimson hover:shadow-md"
                 >
                   {c.image_url && (
                     <div
@@ -128,7 +129,7 @@ export default async function LandingPage() {
                     >
                       {STATUS_LABEL[c.status] ?? c.status}
                     </span>
-                    <h2 className="mt-2 font-display text-lg  text-wine-900 group-hover:text-wine-500">
+                    <h2 className="mt-2 font-display text-lg  text-crimson-darker group-hover:text-crimson">
                       {c.title}
                     </h2>
                     <p className="mt-1 line-clamp-2 text-sm text-ink/60">
@@ -136,7 +137,7 @@ export default async function LandingPage() {
                     </p>
                     <div className="mt-4 h-1 w-full bg-ink/10">
                       <div
-                        className="h-1 bg-sky-500"
+                        className="h-1 bg-crimson"
                         style={{ width: `${pct}%` }}
                       />
                     </div>

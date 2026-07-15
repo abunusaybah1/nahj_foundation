@@ -100,7 +100,7 @@ export default function SetPasswordPage() {
     return (
       <main className="flex min-h-screen items-center justify-center bg-paper px-6 text-center text-ink">
         <div className="max-w-sm">
-          <p className="font-display text-lg text-wine-900">
+          <p className="font-display text-lg text-crimson-darker">
             Link expired or invalid
           </p>
           <p className="mt-2 text-sm text-ink/60">
@@ -118,7 +118,9 @@ export default function SetPasswordPage() {
         onSubmit={handleSubmit}
         className="w-full max-w-sm border border-ink/10 p-8"
       >
-        <p className="font-display text-xl text-wine-900">Set your password</p>
+        <p className="font-display text-xl text-crimson-darker">
+          Set your password
+        </p>
         <p className="mt-2 text-sm text-ink/60">
           Choose a password to finish setting up your admin account.
         </p>
@@ -131,7 +133,7 @@ export default function SetPasswordPage() {
             required
             minLength={8}
             onChange={(e) => setPassword(e.target.value)}
-            className="w-full border border-ink/15 bg-transparent px-4 py-2.5 text-sm outline-none focus:border-sky-500"
+            className="w-full border border-ink/15 bg-transparent px-4 py-2.5 text-sm outline-none focus:border-crimson"
           />
           <input
             type={showPassword ? "text" : "password"}
@@ -139,7 +141,7 @@ export default function SetPasswordPage() {
             value={confirm}
             required
             onChange={(e) => setConfirm(e.target.value)}
-            className="w-full border border-ink/15 bg-transparent px-4 py-2.5 text-sm outline-none focus:border-sky-500"
+            className="w-full border border-ink/15 bg-transparent px-4 py-2.5 text-sm outline-none focus:border-crimson"
           />
         </div>
         <div className="flex items-center gap-1 mt-2">
@@ -148,19 +150,19 @@ export default function SetPasswordPage() {
             checked={showPassword}
             onChange={() => setShowPassword(!showPassword)}
             id="showHide"
-            className="mt-2 self-start accent-wine-500 size-4"
+            className="mt-2 self-start accent-crimson size-4"
           />
           <label htmlFor="showHide" className="mt-1 select-none">
             Show password
           </label>
         </div>
 
-        {error && <p className="mt-3 text-sm text-wine-500">{error}</p>}
+        {error && <p className="mt-3 text-sm text-crimson">{error}</p>}
 
         <button
           type="submit"
           disabled={submitting}
-          className="mt-6 w-full bg-sky-500 py-2.5 text-sm font-semibold text-paper hover:bg-sky-700 disabled:opacity-60"
+          className="mt-6 w-full bg-crimson py-2.5 text-sm font-semibold text-paper hover:bg-crimson-darker disabled:opacity-60"
         >
           {submitting ? "Saving…" : "Set password & continue"}
         </button>

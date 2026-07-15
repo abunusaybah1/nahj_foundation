@@ -19,8 +19,8 @@ const STATUS_LABEL: Record<string, string> = {
 
 const STATUS_BADGE_STYLE: Record<string, string> = {
   draft: "border-ink/20 text-ink/50",
-  published: "border-sky-500/40 text-sky-700",
-  archived: "border-wine-500/40 text-wine-500",
+  published: "border-crimson/40 text-crimson-darker",
+  archived: "border-crimson/40 text-crimson",
 };
 
 export default async function AdminDashboardPage() {
@@ -103,7 +103,7 @@ export default async function AdminDashboardPage() {
         href={href}
         className={`border bg-paper p-5 shadow-sm transition hover:shadow-md ${
           mine
-            ? "border-ink/10 hover:border-wine-500"
+            ? "border-ink/10 hover:border-crimson"
             : "border-ink/10 opacity-90 hover:border-ink/30 hover:opacity-100"
         }`}
       >
@@ -117,7 +117,7 @@ export default async function AdminDashboardPage() {
           </span>
         </div>
         <h3
-          className={`mt-2 font-display text-lg  ${mine ? "text-wine-900" : "text-ink"}`}
+          className={`mt-2 font-display text-lg  ${mine ? "text-crimson-darker" : "text-ink"}`}
         >
           {c.title}
         </h3>
@@ -128,7 +128,7 @@ export default async function AdminDashboardPage() {
         )}
         <div className="mt-4 h-1 w-full bg-ink/10">
           <div
-            className={`h-1 ${mine ? "bg-sky-500" : "bg-ink/30"}`}
+            className={`h-1 ${mine ? "bg-crimson" : "bg-ink/30"}`}
             style={{ width: `${pct}%` }}
           />
         </div>
@@ -143,13 +143,13 @@ export default async function AdminDashboardPage() {
     <div className="flex flex-col gap-12 p-8">
       <header className="flex flex-wrap items-center justify-between gap-4 border-b border-ink/10 pb-6">
         <div>
-          <h1 className="mt-2 font-display text-3xl text-wine-900">
+          <h1 className="mt-2 font-display text-3xl text-crimson-darker">
             Dashboard
           </h1>
         </div>
         <Link
           href="/admin/campaigns/new"
-          className="bg-wine-500 px-5 py-2.5 font-semibold text-paper shadow-sm transition hover:bg-wine-700"
+          className="bg-crimson px-5 py-2.5 font-semibold text-paper shadow-sm transition hover:bg-crimson"
         >
           New campaign
         </Link>
@@ -157,7 +157,7 @@ export default async function AdminDashboardPage() {
 
       <section>
         {myCampaigns.length === 0 ? (
-          <div className="border border-wine-500/30 bg-wine-50 p-8 shadow-sm">
+          <div className="border border-crimson/5 bg-crimson/5 p-8 shadow-sm">
             <p className="text-ink/80">
               You haven&apos;t created a campaign yet.
             </p>
@@ -172,7 +172,7 @@ export default async function AdminDashboardPage() {
       </section>
 
       <section>
-        <h2 className="mb-4 border-b border-ink/10 pb-3 font-display text-xl  text-wine-900">
+        <h2 className="mb-4 border-b border-ink/10 pb-3 font-display text-xl  text-crimson-darker">
           Other admins&apos; campaigns
         </h2>
         {otherCampaigns.length === 0 ? (

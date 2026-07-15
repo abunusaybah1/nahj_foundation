@@ -8,7 +8,7 @@ export default function ConfirmButton({
   confirmTitle,
   confirmMessage,
   confirmLabel = "Confirm",
-  className = "text-sm text-wine-600 hover:opacity-90 bg-pink-950 text-paper px-3 py-2",
+  className = "text-sm text-crimson hover:opacity-90 bg-pink-950 text-paper px-3 py-2",
 }: {
   action: () => Promise<void>;
   label: string;
@@ -54,7 +54,7 @@ export default function ConfirmButton({
             <p className="font-display text-lg">{confirmTitle}</p>
             <p className="mt-2 text-sm text-ink/70">{confirmMessage}</p>
 
-            {error && <p className="mt-3 text-sm text-wine-600">{error}</p>}
+            {error && <p className="mt-3 text-sm text-crimson">{error}</p>}
 
             <div className="mt-6 flex gap-3">
               <button
@@ -67,7 +67,7 @@ export default function ConfirmButton({
               <button
                 onClick={handleConfirm}
                 disabled={pending}
-                className="flex-1 bg-wine-500 px-4 py-2.5 text-sm font-semibold text-paper hover:bg-wine-700 disabled:opacity-60"
+                className="flex-1 bg-crimson px-4 py-2.5 text-sm font-semibold text-paper hover:bg-crimson disabled:opacity-60"
               >
                 {pending ? "Removing…" : confirmLabel}
               </button>

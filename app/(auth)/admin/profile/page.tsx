@@ -16,7 +16,7 @@ export default async function ProfilePage() {
 
   return (
     <main className="mx-auto max-w-xl px-6 py-12">
-      <h1 className="font-display text-2xl  text-wine-900">Profile</h1>
+      <h1 className="font-display text-2xl  text-crimson-darker">Profile</h1>
 
       <section className="mt-8 border border-ink/10 p-6">
         <p className="text-xs uppercase tracking-wide text-ink/40">Account</p>
@@ -36,9 +36,9 @@ export default async function ProfilePage() {
             name="full_name"
             defaultValue={profile?.full_name ?? ""}
             required
-            className="flex-1 border border-ink/15 bg-transparent px-4 py-2.5 text-sm outline-none focus:border-sky-500"
+            className="flex-1 border border-ink/15 bg-transparent px-4 py-2.5 text-sm outline-none focus:border-crimson"
           />
-          <button className="bg-sky-500 px-5 py-2.5 text-sm font-semibold text-paper hover:bg-sky-700">
+          <button className="bg-crimson px-5 py-2.5 text-sm font-semibold text-paper hover:bg-crimson-darker">
             Save
           </button>
         </form>
@@ -53,9 +53,9 @@ export default async function ProfilePage() {
             placeholder="New password"
             minLength={8}
             required
-            className="flex-1 border border-ink/15 bg-transparent px-4 py-2.5 text-sm outline-none focus:border-sky-500"
+            className="flex-1 border border-ink/15 bg-transparent px-4 py-2.5 text-sm outline-none focus:border-crimson"
           />
-          <button className="bg-wine-500 px-5 py-2.5 text-sm font-semibold text-paper hover:bg-wine-700">
+          <button className="bg-crimson px-5 py-2.5 text-sm font-semibold text-paper hover:bg-crimson">
             Update
           </button>
         </form>

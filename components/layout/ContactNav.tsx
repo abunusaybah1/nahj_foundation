@@ -8,7 +8,7 @@ export default function ContactNav() {
       <nav className="mx-auto flex max-w-6xl items-center justify-center px-6 py-4">
         <Link
           href="https://wa.me/2348164758649"
-          className="text-lg font-bold text-paper bg-wine-900 px-3 py-2 rounded-md"
+          className="text-lg font-bold text-paper bg-crimson-darker px-3 py-2 rounded-md"
         >
           Report an issue
         </Link>

@@ -19,8 +19,8 @@ const STATUS_LABEL: Record<string, string> = {
 
 const STATUS_BADGE_STYLE: Record<string, string> = {
   draft: "border-ink/20 text-ink/50",
-  published: "border-sky-500/40 text-sky-700",
-  archived: "border-wine-500/40 text-wine-500",
+  published: "border-crimson/40 text-crimson-darker",
+  archived: "border-crimson/40 text-crimson",
 };
 
 export default async function AdminCampaignsPage() {
@@ -29,7 +29,6 @@ export default async function AdminCampaignsPage() {
   const {
     data: { user },
   } = await supabase.auth.getUser();
-
 
   const { data: campaigns } = await supabase
     .from("campaigns")
@@ -69,10 +68,12 @@ export default async function AdminCampaignsPage() {
   return (
     <div className="flex flex-col gap-8 p-8">
       <header className="flex flex-wrap items-center justify-between gap-4 border-b border-ink/10 pb-6">
-        <h1 className="font-display text-3xl text-wine-900">All Campaigns</h1>
+        <h1 className="font-display text-3xl text-crimson-darker">
+          All Campaigns
+        </h1>
         <Link
           href="/admin/campaigns/new"
-          className="bg-wine-500 px-5 py-2.5 font-semibold text-paper shadow-sm transition hover:bg-wine-700"
+          className="bg-crimson px-5 py-2.5 font-semibold text-paper shadow-sm transition hover:bg-crimson"
         >
           New campaign
         </Link>
@@ -97,7 +98,7 @@ export default async function AdminCampaignsPage() {
             <Link
               key={c.id}
               href={`/admin/campaigns/${c.id}`}
-              className="group border border-ink/10 bg-paper shadow-sm transition hover:border-wine-500 hover:shadow-md"
+              className="group border border-ink/10 bg-paper shadow-sm transition hover:border-crimson hover:shadow-md"
             >
               {c.image_url && (
                 <div
@@ -116,12 +117,12 @@ export default async function AdminCampaignsPage() {
                     {STATUS_LABEL[c.status] ?? c.status}
                   </span>
                   {mine && (
-                    <span className="text-[10px] uppercase tracking-wider text-sky-700">
+                    <span className="text-[10px] uppercase tracking-wider text-crimson-darker">
                       Mine
                     </span>
                   )}
                 </div>
-                <h2 className="mt-2 font-display text-lg   text-wine-900 group-hover:text-wine-500">
+                <h2 className="mt-2 font-display text-lg   text-crimson-darker group-hover:text-crimson">
                   {c.title}
                 </h2>
                 <p className="mt-1 text-xs text-ink/50">
@@ -129,7 +130,7 @@ export default async function AdminCampaignsPage() {
                 </p>
                 <div className="mt-4 h-1 w-full bg-ink/10">
                   <div
-                    className="h-1 bg-sky-500"
+                    className="h-1 bg-crimson"
                     style={{ width: `${pct}%` }}
                   />
                 </div>

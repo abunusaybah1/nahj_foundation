@@ -34,10 +34,10 @@ export default function AdminLoginPage() {
 
   return (
     <main className="mx-auto flex min-h-[80vh] max-w-md flex-col justify-center px-6 py-16">
-      <p className="font-mono text-xs uppercase tracking-[0.2em] text-wine-500">
+      <p className="font-mono text-xs uppercase tracking-[0.2em] text-crimson">
         Admin
       </p>
-      <h1 className="mt-3 font-display text-3xl  text-wine-900">
+      <h1 className="mt-3 font-display text-3xl  text-crimson-darker">
         Sign in
       </h1>
 
@@ -51,7 +51,7 @@ export default function AdminLoginPage() {
             required
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            className="border border-ink/15 bg-transparent px-4 py-3 outline-none focus:border-sky-500"
+            className="border border-ink/15 bg-transparent px-4 py-3 outline-none focus:border-crimson"
           />
         </label>
 
@@ -64,16 +64,16 @@ export default function AdminLoginPage() {
             required
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            className="border border-ink/15 bg-transparent px-4 py-3 outline-none focus:border-sky-500"
+            className="border border-ink/15 bg-transparent px-4 py-3 outline-none focus:border-crimson"
           />
         </label>
 
-        {error && <p className="text-sm text-wine-500">{error}</p>}
+        {error && <p className="text-sm text-crimson">{error}</p>}
 
         <button
           type="submit"
           disabled={submitting}
-          className="mt-2 bg-wine-500 px-4 py-3.5 font-semibold text-paper transition hover:bg-wine-700 disabled:opacity-60"
+          className="mt-2 bg-crimson px-4 py-3.5 font-semibold text-paper transition hover:bg-crimson disabled:opacity-60"
         >
           {submitting ? "Signing in…" : "Sign in"}
         </button>

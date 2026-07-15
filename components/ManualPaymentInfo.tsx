@@ -37,7 +37,7 @@ export default function ManualPaymentInfo() {
           </span>
           <button
             onClick={handleCopy}
-            className="flex items-center gap-2 font-mono text-base text-wine-500 hover:text-wine-700"
+            className="flex items-center gap-2 font-mono text-base text-crimson hover:text-crimson"
           >
             {ACCOUNT.number}
             <span className="text-xs text-ink/40">

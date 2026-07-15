@@ -58,10 +58,10 @@ export default async function EditCampaignPage({
 
   return (
     <div className="max-w-2xl p-8">
-      <p className="font-mono text-xs uppercase tracking-[0.2em] text-wine-500">
+      <p className="font-mono text-xs uppercase tracking-[0.2em] text-crimson">
         {canEdit ? "Campaign" : "View"}
       </p>
-      <h1 className="mt-2 font-display text-3xl  text-wine-900">
+      <h1 className="mt-2 font-display text-3xl  text-crimson-darker">
         {campaign.title}
       </h1>
 

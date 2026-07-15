@@ -128,7 +128,7 @@ export default function CampaignForm({
           value={title}
           onChange={(e) => setTitle(e.target.value)}
           placeholder="Clean Water for Agbowo Community"
-          className="border border-ink/15 bg-transparent px-4 py-3 outline-none focus:border-sky-500"
+          className="border border-ink/15 bg-transparent px-4 py-3 outline-none focus:border-crimson"
         />
       </label>
 
@@ -142,7 +142,7 @@ export default function CampaignForm({
           value={story}
           onChange={(e) => setStory(e.target.value)}
           placeholder="Describe the cause, who it helps, and what the funds cover."
-          className="resize-y border border-ink/15 bg-transparent px-4 py-3 leading-relaxed outline-none focus:border-sky-500"
+          className="resize-y border border-ink/15 bg-transparent px-4 py-3 leading-relaxed outline-none focus:border-crimson"
         />
       </label>
 
@@ -157,7 +157,7 @@ export default function CampaignForm({
           value={goalAmount}
           onChange={(e) => setGoalAmount(e.target.value)}
           placeholder="2500000"
-          className="border border-ink/15 bg-transparent px-4 py-3 font-mono outline-none focus:border-sky-500"
+          className="border border-ink/15 bg-transparent px-4 py-3 font-mono outline-none focus:border-crimson"
         />
       </label>
 
@@ -182,7 +182,7 @@ export default function CampaignForm({
           type="file"
           accept="image/*"
           onChange={handleImageChange}
-          className="border border-ink/15 bg-transparent px-4 py-3 text-sm outline-none file:mr-4 file:border-0 file:bg-wine-500 file:px-3 file:py-1.5 file:font-medium file:text-paper"
+          className="border border-ink/15 bg-transparent px-4 py-3 text-sm outline-none file:mr-4 file:border-0 file:bg-crimson file:px-3 file:py-1.5 file:font-medium file:text-paper"
         />
         {uploading && <span className="text-xs text-ink/50">Uploading…</span>}
       </label>
@@ -194,7 +194,7 @@ export default function CampaignForm({
         <select
           value={status}
           onChange={(e) => setStatus(e.target.value as typeof status)}
-          className="border border-ink/15 bg-transparent px-4 py-3 outline-none focus:border-sky-500"
+          className="border border-ink/15 bg-transparent px-4 py-3 outline-none focus:border-crimson"
         >
           <option value="draft">Draft (hidden from public)</option>
           <option value="published">Published (live on the site)</option>
@@ -202,13 +202,13 @@ export default function CampaignForm({
         </select>
       </label>
 
-      {error && <p className="text-sm text-wine-500">{error}</p>}
-      {saved && <p className="text-sm text-sky-700">{savedLabel}</p>}
+      {error && <p className="text-sm text-crimson">{error}</p>}
+      {saved && <p className="text-sm text-crimson-darker">{savedLabel}</p>}
 
       <button
         type="submit"
         disabled={submitting || uploading}
-        className="self-start bg-wine-500 px-6 py-3 font-semibold text-paper shadow-sm transition hover:bg-wine-700 disabled:opacity-60"
+        className="self-start bg-crimson px-6 py-3 font-semibold text-paper shadow-sm transition hover:bg-crimson disabled:opacity-60"
       >
         {submitting ? "Saving…" : submitLabel}
       </button>

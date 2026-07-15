@@ -1,4 +1,3 @@
-
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { removeSubAdmin } from "../actions";
@@ -27,7 +26,12 @@ export default async function SubAdminsPage() {
 
   return (
     <main className="mx-auto max-w-3xl px-6 py-12">
-      <h1 className="font-display text-2xl text-wine-900">Admins</h1>
+      <h1 className="mb-2 font-display text-3xl text-crimson-darker">Admins</h1>
+      <hr className="mb-6 border-ink/10" />
+      <h3 className="mb-2 font-display text-2xl text-crimson-darker">
+        Invite a new admin
+      </h3>
+
       <p className="mt-1 text-sm text-ink/60">
         Invite people to help manage campaigns. They&apos;ll get an email to set
         a password.
@@ -35,6 +39,10 @@ export default async function SubAdminsPage() {
 
       <InviteAdminForm />
 
+      <h3 className="font-display text-2xl text-crimson-darker mt-8">Admins</h3>
+      <p className="mb-8 text-sm text-ink/60">
+        People with access to manage campaigns and view donations.
+      </p>
       <div className="mt-8 divide-y divide-ink/10 border border-ink/10">
         {(admins ?? []).map((a) => (
           <div

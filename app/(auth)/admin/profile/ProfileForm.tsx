@@ -57,7 +57,7 @@ export default function ProfileForm({
           type="text"
           required
           defaultValue={fullName}
-          className="border border-ink/15 bg-transparent px-4 py-3 outline-none focus:border-sky-500"
+          className="border border-ink/15 bg-transparent px-4 py-3 outline-none focus:border-crimson"
         />
       </label>
 
@@ -69,7 +69,7 @@ export default function ProfileForm({
           name="phone"
           type="tel"
           defaultValue={phone}
-          className="border border-ink/15 bg-transparent px-4 py-3 outline-none focus:border-sky-500"
+          className="border border-ink/15 bg-transparent px-4 py-3 outline-none focus:border-crimson"
         />
       </label>
 
@@ -89,7 +89,7 @@ export default function ProfileForm({
         <button
           type="submit"
           disabled={status === "saving"}
-          className="self-start bg-wine-500 px-6 py-3 font-semibold text-paper shadow-sm transition hover:bg-wine-700 disabled:opacity-60"
+          className="self-start bg-crimson px-6 py-3 font-semibold text-paper shadow-sm transition hover:bg-crimson disabled:opacity-60"
         >
           {status === "saving" ? "Saving…" : "Save changes"}
         </button>
@@ -98,16 +98,18 @@ export default function ProfileForm({
           <button
             type="button"
             onClick={() => router.push("/admin")}
-            className="border border-sky-500 px-6 py-3 font-semibold text-sky-700 shadow-sm transition hover:bg-sky-500 hover:text-paper"
+            className="border border-crimson px-6 py-3 font-semibold text-crimson-darker shadow-sm transition hover:bg-crimson hover:text-paper"
           >
             Continue to dashboard →
           </button>
         )}
       </div>
 
-      {status === "saved" && <p className="text-sm text-sky-700">Saved.</p>}
+      {status === "saved" && (
+        <p className="text-sm text-crimson-darker">Saved.</p>
+      )}
       {status === "error" && (
-        <p className="text-sm text-wine-500">
+        <p className="text-sm text-crimson">
           Something went wrong — try again.
         </p>
       )}

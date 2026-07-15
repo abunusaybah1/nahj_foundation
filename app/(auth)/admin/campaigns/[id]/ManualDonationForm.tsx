@@ -84,7 +84,7 @@ export default function ManualDonationForm({
             value={donorName}
             disabled={anonymous}
             onChange={(e) => setDonorName(e.target.value)}
-            className="border border-ink/15 bg-transparent px-3 py-2 text-sm outline-none focus:border-sky-500 disabled:opacity-40"
+            className="border border-ink/15 bg-transparent px-3 py-2 text-sm outline-none focus:border-crimson disabled:opacity-40"
           />
         </label>
         <label className="flex flex-1 flex-col gap-1.5">
@@ -93,7 +93,7 @@ export default function ManualDonationForm({
             type="email"
             value={donorEmail}
             onChange={(e) => setDonorEmail(e.target.value)}
-            className="border border-ink/15 bg-transparent px-3 py-2 text-sm outline-none focus:border-sky-500"
+            className="border border-ink/15 bg-transparent px-3 py-2 text-sm outline-none focus:border-crimson"
           />
         </label>
       </div>
@@ -106,7 +106,7 @@ export default function ManualDonationForm({
             min={1}
             value={amount}
             onChange={(e) => setAmount(e.target.value)}
-            className="border border-ink/15 bg-transparent px-3 py-2 font-mono text-sm outline-none focus:border-sky-500"
+            className="border border-ink/15 bg-transparent px-3 py-2 font-mono text-sm outline-none focus:border-crimson"
           />
         </label>
 
@@ -115,14 +115,14 @@ export default function ManualDonationForm({
             type="checkbox"
             checked={anonymous}
             onChange={(e) => setAnonymous(e.target.checked)}
-            className="h-4 w-4 accent-wine-500"
+            className="h-4 w-4 accent-crimson"
           />
           Anonymous
         </label>
       </div>
 
-      {error && <p className="text-sm text-wine-500">{error}</p>}
-      {saved && <p className="text-sm text-sky-700">Recorded.</p>}
+      {error && <p className="text-sm text-crimson">{error}</p>}
+      {saved && <p className="text-sm text-crimson-darker">Recorded.</p>}
 
       <div className="flex gap-3">
         <button
@@ -135,7 +135,7 @@ export default function ManualDonationForm({
         <button
           type="submit"
           disabled={submitting}
-          className="bg-sky-500 px-4 py-2 text-sm font-semibold text-paper shadow-sm transition hover:bg-sky-700 disabled:opacity-60"
+          className="bg-crimson px-4 py-2 text-sm font-semibold text-paper shadow-sm transition hover:bg-crimson-darker disabled:opacity-60"
         >
           {submitting ? "Recording…" : "Record donation"}
         </button>

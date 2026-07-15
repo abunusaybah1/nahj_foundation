@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useState } from "react";
@@ -163,7 +162,7 @@ export default function CampaignDetailView({
   return (
     <div className="mt-8 flex flex-col gap-6">
       {justSaved && (
-        <p className="border border-sky-500/40 bg-sky-50 px-4 py-3 text-sm text-sky-700 shadow-sm">
+        <p className="border border-crimson/40 bg-crimson px-4 py-3 text-sm text-crimson-darker shadow-sm">
           Changes saved.
         </p>
       )}
@@ -189,7 +188,7 @@ export default function CampaignDetailView({
           <p className="font-mono text-xs uppercase tracking-wide text-ink/50">
             Raised
           </p>
-          <p className="mt-1 font-mono text-lg text-sky-700">
+          <p className="mt-1 font-mono text-lg text-crimson-darker">
             {formatNaira(raised)}
           </p>
         </div>
@@ -198,7 +197,7 @@ export default function CampaignDetailView({
             <p className="font-mono text-xs uppercase tracking-wide text-ink/50">
               Net after fees
             </p>
-            <p className="mt-1 font-mono text-lg text-wine-700">
+            <p className="mt-1 font-mono text-lg text-crimson">
               {formatNaira(netRaised)}
             </p>
             <p className="mt-0.5 text-[11px] text-ink/40">
@@ -244,7 +243,7 @@ export default function CampaignDetailView({
         <div className="flex gap-3 border-t border-ink/10 pt-6">
           <button
             onClick={() => setEditing(true)}
-            className="border border-wine-500 px-4 py-2 text-sm font-medium text-wine-500 shadow-sm transition hover:bg-wine-500 hover:text-paper"
+            className="border border-crimson px-4 py-2 text-sm font-medium text-crimson shadow-sm transition hover:bg-crimson hover:text-paper"
           >
             Edit campaign
           </button>
@@ -253,7 +252,7 @@ export default function CampaignDetailView({
 
       {isSuperAdmin && (
         <div className="border-t border-ink/10 pt-6">
-          <p className="mb-3 font-mono text-xs uppercase tracking-wide text-wine-500">
+          <p className="mb-3 font-mono text-xs uppercase tracking-wide text-crimson">
             Super admin
           </p>
           <DeleteCampaignButton campaignId={campaign.id} onDelete={onDelete} />

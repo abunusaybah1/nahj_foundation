@@ -42,7 +42,7 @@ export default async function CampaignsPage() {
   return (
     <main className="mx-auto max-w-6xl px-6 py-16">
       <header className="mb-12 border-b border-ink/10 pb-8">
-        <h1 className="mt-3 font-display text-4xl text-wine-900 sm:text-5xl">
+        <h1 className="mt-3 font-display text-4xl text-crimson-darker sm:text-5xl">
           All campaigns
         </h1>
       </header>
@@ -68,26 +68,26 @@ export default async function CampaignsPage() {
               className={`group border bg-paper shadow-sm transition ${
                 isClosed
                   ? "border-ink/10 opacity-90 hover:opacity-100"
-                  : "border-ink/10 hover:border-wine-500"
+                  : "border-ink/10 hover:border-crimson"
               }`}
             >
-              {c.image_url && (
+              {/* {c.image_url && (
                 <div
                   className="h-44 w-full bg-paper-dim bg-cover bg-center grayscale-15 transition group-hover:grayscale-0"
                   style={{ backgroundImage: `url(${c.image_url})` }}
                 />
-              )}
+              )} */}
               <div className="p-6">
                 <span
                   className={`border px-2 py-0.5 font-mono text-[10px] uppercase tracking-wider ${
                     isClosed
                       ? "border-ink/20 text-ink/50"
-                      : "border-sky-500/40 text-sky-700"
+                      : "border-crimson/40 text-crimson-darker"
                   }`}
                 >
                   {STATUS_LABEL[c.status] ?? c.status}
                 </span>
-                <h2 className="mt-3 font-display text-xl  text-wine-900 group-hover:text-wine-500">
+                <h2 className="mt-3 font-display text-xl  text-crimson-darker group-hover:text-crimson">
                   {c.title}
                 </h2>
                 <p className="mt-2 line-clamp-2 text-sm text-ink/60">
@@ -95,7 +95,7 @@ export default async function CampaignsPage() {
                 </p>
                 <div className="mt-5 h-1 w-full bg-ink/10">
                   <div
-                    className={`h-1 ${isClosed ? "bg-ink/30" : "bg-sky-500"}`}
+                    className={`h-1 ${isClosed ? "bg-ink/30" : "bg-crimson"}`}
                     style={{ width: `${pct}%` }}
                   />
                 </div>

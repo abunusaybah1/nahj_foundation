@@ -19,7 +19,7 @@ export default function DeleteCampaignButton({
     return (
       <button
         onClick={() => setConfirming(true)}
-        className="border bg-wine-500 px-4 py-2 text-sm font-medium text-paper hover:bg-wine-700"
+        className="border bg-crimson px-4 py-2 text-sm font-medium text-paper hover:bg-crimson"
       >
         Delete this campaign
       </button>
@@ -27,12 +27,12 @@ export default function DeleteCampaignButton({
   }
 
   return (
-    <div className="flex flex-col gap-3 border border-wine-500/30 bg-wine-50 p-4">
+    <div className="flex flex-col gap-3 border border-crimson/5 bg-crimson/5 p-4">
       <p className="text-sm text-ink/80">
         This permanently deletes the campaign and every donation record tied to
         it. This cannot be undone.
       </p>
-      {error && <p className="text-sm text-wine-500">{error}</p>}
+      {error && <p className="text-sm text-crimson">{error}</p>}
       <div className="flex gap-3">
         <button
           onClick={() => setConfirming(false)}
@@ -50,7 +50,7 @@ export default function DeleteCampaignButton({
             router.push("/admin");
             router.refresh();
           }}
-          className="bg-wine-500 px-4 py-2 text-sm font-semibold text-paper hover:bg-wine-700"
+          className="bg-crimson px-4 py-2 text-sm font-semibold text-paper hover:bg-crimson"
         >
           Yes, delete permanently
         </button>

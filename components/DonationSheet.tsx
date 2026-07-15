@@ -190,7 +190,7 @@ export default function DonationSheet({
               onClick={() => setMode("online")}
               className={`flex-1 border-b-2 py-2.5 text-sm font-medium transition ${
                 mode === "online"
-                  ? "border-wine-500 text-wine-700"
+                  ? "border-crimson text-crimson"
                   : "border-transparent text-ink/80 hover:text-ink/70"
               }`}
             >
@@ -200,7 +200,7 @@ export default function DonationSheet({
               onClick={() => setMode("manual")}
               className={`flex-1 border-b-2 py-2.5 text-sm font-medium transition ${
                 mode === "manual"
-                  ? "border-wine-500 text-wine-700"
+                  ? "border-crimson text-crimson"
                   : "border-transparent text-ink/80 hover:text-ink/70"
               }`}
             >
@@ -222,8 +222,8 @@ export default function DonationSheet({
                     onClick={() => selectPreset(value)}
                     className={`border px-4 py-3 font-mono text-base transition ${
                       active
-                        ? "border-wine-500 bg-wine-500 text-paper"
-                        : "border-ink/15 bg-transparent text-ink hover:border-wine-500"
+                        ? "border-crimson bg-crimson text-paper"
+                        : "border-ink/15 bg-transparent text-ink hover:border-crimson"
                     }`}
                   >
                     ₦{value.toLocaleString("en-NG")}
@@ -236,7 +236,7 @@ export default function DonationSheet({
               <span className="font-mono text-xs uppercase tracking-wide text-ink">
                 Or enter your own amount
               </span>
-              <div className="flex items-center gap-2 border border-ink/15 bg-transparent px-4 py-3 focus-within:border-sky-500">
+              <div className="flex items-center gap-2 border border-ink/15 bg-transparent px-4 py-3 focus-within:border-crimson">
                 <span className="font-mono text-ink/50">₦</span>
                 <input
                   inputMode="numeric"
@@ -248,7 +248,7 @@ export default function DonationSheet({
               </div>
             </label>
 
-            {error && <p className="text-sm text-wine-500">{error}</p>}
+            {error && <p className="text-sm text-crimson">{error}</p>}
 
             <button
               onClick={() => {
@@ -259,7 +259,7 @@ export default function DonationSheet({
                 setError(null);
                 setStep("details");
               }}
-              className="bg-wine-500 px-4 py-3.5 text-center font-semibold text-paper transition hover:bg-wine-700"
+              className="bg-crimson px-4 py-3.5 text-center font-semibold text-paper transition hover:bg-crimson"
             >
               Continue
             </button>
@@ -278,7 +278,7 @@ export default function DonationSheet({
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="you@example.com"
-                className="border border-ink/15 bg-transparent px-4 py-3 outline-none focus:border-sky-500"
+                className="border border-ink/15 bg-transparent px-4 py-3 outline-none focus:border-crimson"
               />
             </label>
 
@@ -292,7 +292,7 @@ export default function DonationSheet({
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 placeholder="Your name"
-                className="border border-ink/15 bg-transparent px-4 py-3 outline-none focus:border-sky-500 disabled:opacity-40"
+                className="border border-ink/15 bg-transparent px-4 py-3 outline-none focus:border-crimson disabled:opacity-40"
               />
             </label>
 
@@ -305,11 +305,11 @@ export default function DonationSheet({
                 value={phone}
                 onChange={(e) => setPhone(e.target.value)}
                 placeholder="080..."
-                className="border border-ink/15 bg-transparent px-4 py-3 outline-none focus:border-sky-500"
+                className="border border-ink/15 bg-transparent px-4 py-3 outline-none focus:border-crimson"
               />
             </label>
 
-            {error && <p className="text-sm text-wine-500">{error}</p>}
+            {error && <p className="text-sm text-crimson">{error}</p>}
 
             <div className="mt-1 flex items-center justify-between border border-ink/10 bg-paper-dim px-4 py-3">
               <span className="text-sm text-ink/60">You&apos;re giving</span>
@@ -321,14 +321,14 @@ export default function DonationSheet({
             <div className="flex gap-3">
               <button
                 onClick={() => setStep("amount")}
-                className="border border-sky-900 px-4 py-3.5 font-medium text-sky-950 hover:border-sky-500 hover:bg-sky-50 transition"
+                className="border border-crimson-900 px-4 py-3.5 font-medium text-crimson  hover:bg-crimson hover:text-paper transition"
               >
                 Back
               </button>
               <button
                 onClick={handlePay}
                 disabled={submitting}
-                className="flex-1 bg-sky-500 px-4 py-3.5 text-center font-semibold text-paper transition hover:bg-sky-700 disabled:opacity-60"
+                className="flex-1 bg-crimson px-4 py-3.5 text-center font-semibold text-paper transition hover:bg-crimson-darker disabled:opacity-60"
               >
                 {submitting ? "Opening payment…" : "Pay now"}
               </button>
@@ -338,7 +338,7 @@ export default function DonationSheet({
 
         {step === "success" && (
           <div className="flex flex-col items-center gap-3 py-4 text-center">
-            <div className="flex h-12 w-12 items-center justify-center border border-sky-950 font-mono text-xl text-sky-950">
+            <div className="flex h-12 w-12 items-center justify-center border border-crimson font-mono text-xl text-crimson">
               ✓
             </div>
             <p className="font-display text-xl">
@@ -350,7 +350,7 @@ export default function DonationSheet({
             </p>
             <button
               onClick={onClose}
-              className="mt-3 bg-wine-500 px-6 py-3 font-semibold text-paper hover:bg-wine-700"
+              className="mt-3 bg-crimson px-6 py-3 font-semibold text-paper hover:bg-crimson"
             >
               Done
             </button>

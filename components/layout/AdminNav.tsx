@@ -22,7 +22,7 @@ export default function AdminNav({
   }
 
   const linkClass = (href: string) =>
-    pathname === href ? "text-wine-500" : "text-ink/70 hover:text-wine-500";
+    pathname === href ? "text-crimson" : "text-ink/70 hover:text-crimson";
 
   return (
     <header className="sticky top-0 z-40 border-b border-ink/10 bg-paper/95 backdrop-blur">
@@ -30,7 +30,7 @@ export default function AdminNav({
         <div className="flex items-center gap-8">
           <Link
             href="/admin"
-            className="font-display text-lg  text-wine-900"
+            className="font-display text-lg  text-crimson-darker"
           >
             Nahj Admin
           </Link>
@@ -42,7 +42,7 @@ export default function AdminNav({
               href="/admin/campaigns"
               className={linkClass("/admin/campaigns")}
             >
-             Campaigns
+              Campaigns
             </Link>
             <Link href="/admin/profile" className={linkClass("/admin/profile")}>
               Profile
@@ -73,7 +73,7 @@ export default function AdminNav({
           </Link>
           <button
             onClick={handleLogout}
-            className="border border-wine-500 px-3 py-1.5 font-medium text-wine-500 transition hover:bg-wine-500 hover:text-paper"
+            className="border border-crimson px-3 py-1.5 font-medium text-crimson transition hover:bg-crimson hover:text-paper"
           >
             Log out
           </button>
