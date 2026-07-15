@@ -81,7 +81,7 @@ export default async function CampaignsPage() {
             >
               {c.image_url && (
                 <div
-                  className="h-44 w-full bg-paper-dim bg-cover bg-center grayscale-[15%] transition group-hover:grayscale-0"
+                  className="h-44 w-full bg-paper-dim bg-cover bg-center grayscale-15 transition group-hover:grayscale-0"
                   style={{ backgroundImage: `url(${c.image_url})` }}
                 />
               )}

@@ -5,6 +5,7 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { createClient } from "@/lib/supabase/client";
+import { CgClose } from "react-icons/cg";
 
 type Role = "super_admin" | "sub_admin" | null;
 
@@ -15,19 +16,18 @@ export default function Navbar() {
   const [fullName, setFullName] = useState<string | null>(null);
   const [checked, setChecked] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
+  const [mobileOpen, setMobileOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
 
-  // Close the dropdown when the route changes. Adjusting state during
-  // render (rather than in an effect) is the recommended pattern for
+  // Close the dropdown / mobile overlay when the route changes.
+  // Adjusting state during render is the recommended pattern for
   // "reset this when X changes" — see https://react.dev/learn/you-might-not-need-an-effect
   const [prevPathname, setPrevPathname] = useState(pathname);
   if (pathname !== prevPathname) {
     setPrevPathname(pathname);
     setMenuOpen(false);
+    setMobileOpen(false);
   }
-
-  // replace just this useEffect in components/layout/Navbar.tsx — everything
-  // else in the file stays as I gave it in the last message
 
   useEffect(() => {
     const supabase = createClient();
@@ -63,8 +63,8 @@ export default function Navbar() {
     };
   }, [pathname]);
 
-  // Close dropdown on outside click — this one IS a legitimate effect,
-  // since it's subscribing to a real external event source (the DOM).
+  // Close dropdown on outside click — legitimate effect, subscribing
+  // to a real external event source (the DOM).
   useEffect(() => {
     function handleClick(e: MouseEvent) {
       if (menuRef.current && !menuRef.current.contains(e.target as Node)) {
@@ -75,10 +75,19 @@ export default function Navbar() {
     return () => document.removeEventListener("mousedown", handleClick);
   }, []);
 
+  // Lock body scroll while the mobile overlay is open.
+  useEffect(() => {
+    document.body.style.overflow = mobileOpen ? "hidden" : "";
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [mobileOpen]);
+
   async function handleLogout() {
     const supabase = createClient();
     await supabase.auth.signOut();
     setMenuOpen(false);
+    setMobileOpen(false);
     router.push("/admin/login");
     router.refresh();
   }
@@ -87,58 +96,36 @@ export default function Navbar() {
   const isAdminUser = inAdmin || !!role;
   const initial = (fullName ?? "A").charAt(0).toUpperCase();
 
+  const primaryHref = isAdminUser ? "/admin" : "/";
+  const primaryLabel = isAdminUser ? "Dashboard" : "Home";
+  const primaryActive = isAdminUser ? pathname === "/admin" : pathname === "/";
+
+  const campaignsHref = isAdminUser ? "/admin/campaigns" : "/campaigns";
+  const campaignsActive = isAdminUser
+    ? pathname?.startsWith("/admin/campaigns")
+    : pathname?.startsWith("/campaigns");
+
   return (
     <header className="sticky top-0 z-40 border-b border-ink/10 bg-paper/95 backdrop-blur">
       <nav className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
-        <div className="flex items-center gap-3">
-          <Link href="/" className="font-display text-lg  text-wine-900">
-            Nahj Foundation
-          </Link>
-        </div>
+        <Link href="/" className="font-display text-lg text-wine-900">
+          Nahj Foundation
+        </Link>
 
-        <div className="flex items-center gap-6 text-sm text-ink/70">
-          {isAdminUser ? (
-            <Link
-              href="/admin"
-              className={
-                pathname === "/admin" ? "text-sky-700" : "hover:text-sky-700"
-              }
-            >
-              Dashboard
-            </Link>
-          ) : (
-            <Link
-              href="/"
-              className={
-                pathname === "/" ? "text-sky-700" : "hover:text-sky-700"
-              }
-            >
-              Home
-            </Link>
-          )}
-          {isAdminUser ? (
-            <Link
-              href="/admin/campaigns"
-              className={
-                pathname?.startsWith("/admin/campaigns")
-                  ? "text-sky-700"
-                  : "hover:text-sky-700"
-              }
-            >
-              Campaigns
-            </Link>
-          ) : (
-            <Link
-              href="/campaigns"
-              className={
-                pathname?.startsWith("/campaigns")
-                  ? "text-sky-700"
-                  : "hover:text-sky-700"
-              }
-            >
-              Campaigns
-            </Link>
-          )}
+        {/* Desktop nav */}
+        <div className="hidden items-center gap-6 text-sm text-ink/70 sm:flex">
+          <Link
+            href={primaryHref}
+            className={primaryActive ? "text-sky-700" : "hover:text-sky-700"}
+          >
+            {primaryLabel}
+          </Link>
+          <Link
+            href={campaignsHref}
+            className={campaignsActive ? "text-sky-700" : "hover:text-sky-700"}
+          >
+            Campaigns
+          </Link>
           <Link
             href="/contact"
             className={
@@ -148,12 +135,12 @@ export default function Navbar() {
             Contact Us
           </Link>
 
-          <div className="w-27.5 flex justify-end">
+          <div className="flex w-27.5 justify-end">
             {!checked ? null : isAdminUser ? (
               <div className="relative" ref={menuRef}>
                 <button
                   onClick={() => setMenuOpen((v) => !v)}
-                  className="flex items-center gap-2 border bg-ink text-paper py-1.5 pl-1.5 pr-3 hover:border-wine-500"
+                  className="flex items-center gap-2 border bg-ink py-1.5 pl-1.5 pr-3 text-paper hover:border-wine-500"
                 >
                   <span className="flex h-6 w-6 items-center justify-center rounded-full bg-paper text-xs font-semibold text-ink">
                     {initial}
@@ -178,7 +165,7 @@ export default function Navbar() {
                           href="/admin/sub-admins"
                           className="block px-4 py-2 text-sm text-ink/80 hover:bg-paper-dim"
                         >
-                          Sub-admins
+                          Admins
                         </Link>
                       )}
                       <Link
@@ -210,7 +197,115 @@ export default function Navbar() {
             )}
           </div>
         </div>
+
+        {/* Mobile hamburger */}
+        <button
+          onClick={() => setMobileOpen(true)}
+          aria-label="Open menu"
+          className="flex h-9 w-9 flex-col items-center justify-center gap-1.5 sm:hidden"
+        >
+          <span className="h-0.5 w-6 bg-ink" />
+          <span className="h-0.5 w-6 bg-ink" />
+          <span className="h-0.5 w-6 bg-ink" />
+        </button>
       </nav>
+
+      {/* Mobile full-screen overlay */}
+      {mobileOpen && (
+        <div className="fixed inset-0 z-50 flex flex-col bg-paper sm:hidden">
+          <div className="flex items-center justify-between border-b border-ink/10 px-6 py-4">
+            <span className="font-display text-lg text-wine-900">
+              Nahj Foundation
+            </span>
+            <CgClose
+              onClick={() => setMobileOpen(false)}
+              aria-label="Close menu"
+              className="flex h-9 w-9 p-1 items-center justify-center border border-ink/15 text-xl leading-none text-ink"
+            />
+          </div>
+
+          <div className="bg-paper z-40 flex flex-1 flex-col px-6 py-8">
+            {isAdminUser && checked && (
+              <div className="mb-8 border border-ink/10 bg-paper-dim px-4 py-3">
+                <p className="truncate text-sm font-medium text-ink">
+                  {fullName ?? "Admin"}
+                </p>
+                <p className="text-xs capitalize text-ink/50">
+                  {role?.replace("_", " ") ?? "Admin"}
+                </p>
+              </div>
+            )}
+
+            <div className="flex flex-col gap-1">
+              <Link
+                href={primaryHref}
+                onClick={() => setMobileOpen(false)}
+                className={`border-b border-ink/10 py-4 text-lg ${
+                  primaryActive ? "text-sky-700" : "text-ink"
+                }`}
+              >
+                {primaryLabel}
+              </Link>
+              <Link
+                href={campaignsHref}
+                onClick={() => setMobileOpen(false)}
+                className={`border-b border-ink/10 py-4 text-lg ${
+                  campaignsActive ? "text-sky-700" : "text-ink"
+                }`}
+              >
+                Campaigns
+              </Link>
+
+              {isAdminUser && role === "super_admin" && (
+                <Link
+                  href="/admin/sub-admins"
+                  onClick={() => setMobileOpen(false)}
+                  className="border-b border-ink/10 py-4 text-lg text-ink"
+                >
+                  Admins
+                </Link>
+              )}
+              {isAdminUser && (
+                <Link
+                  href="/admin/profile"
+                  onClick={() => setMobileOpen(false)}
+                  className="border-b border-ink/10 py-4 text-lg text-ink"
+                >
+                  Profile
+                </Link>
+              )}
+              <Link
+                href="/contact"
+                onClick={() => setMobileOpen(false)}
+                className={`border-b border-ink/10 py-4 text-lg ${
+                  pathname === "/contact" ? "text-sky-700" : "text-ink"
+                }`}
+              >
+                Contact Us
+              </Link>
+            </div>
+
+            <div className="mt-auto pt-8">
+              {!checked ? null : isAdminUser ? (
+                <button
+                  onClick={handleLogout}
+                  className="w-full border border-wine-500 py-3 text-sm font-semibold text-wine-600"
+                >
+                  Log out
+                </button>
+              ) : (
+                <Link
+                  href="/admin/login"
+                  onClick={() => setMobileOpen(false)}
+                  className="block w-full border border-sky-500/40 py-3 text-center text-sm hover:border-sky-500"
+                >
+                  Admin login
+                </Link>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
     </header>
   );
 }
