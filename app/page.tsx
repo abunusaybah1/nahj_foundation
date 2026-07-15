@@ -1,7 +1,6 @@
-// app/page.tsx
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
-import Image from "next/image";
+import CountUp from "@/components/CountUp";
 
 export const revalidate = 60;
 
@@ -10,10 +9,13 @@ const STATUS_LABEL: Record<string, string> = {
   archived: "Closed",
 };
 
+const STATUS_BADGE_STYLE: Record<string, string> = {
+  published: "border-sky-500/40 text-sky-700",
+  archived: "border-wine-500/40 text-wine-500",
+};
+
 async function getFeaturedCampaigns() {
-  // Server Components must use the server client (reads request
-  // cookies) — never the browser client, which has no cookies to read
-  // outside the browser and will silently return unauthenticated data.
+
   const supabase = await createClient();
 
   const { data: campaigns } = await supabase
@@ -54,12 +56,11 @@ export default async function LandingPage() {
 
   return (
     <main className="bg-paper text-ink">
-      {/* HERO — asymmetric, no centered badge/blob pattern */}
       <section className="relative overflow-hidden border-b border-wine-500/15">
         <div className="absolute inset-0 texture-dots" aria-hidden />
         <div className="relative mx-auto grid max-w-6xl gap-10 px-6 py-20 sm:py-28 lg:grid-cols-[1.3fr_0.7fr] lg:items-end">
           <div>
-            <h1 className="font-display text-5xl max-w-md leading-[1.05] tracking-tight text-wine-900 sm:text-6xl">
+            <h1 className="font-display max-w-md text-5xl leading-[1.05] tracking-tight text-wine-900 sm:text-6xl">
               Be the reason someone smiles again
             </h1>
             <p className="mt-6 max-w-md text-base leading-relaxed text-ink/70">
@@ -67,10 +68,6 @@ export default async function LandingPage() {
               hardship in this world, Allah will relieve his hardship on the Day
               of Resurrection.&quot;
             </p>
-            {/* <p className="mt-6 max-w-md text-base leading-relaxed text-ink/70">
-              We tracks every campaign from first naira to final delivery —
-              nothing raised without a receipt, nothing spent without a record.
-            </p> */}
             <div className="mt-8 flex items-center gap-4">
               <Link
                 href="/campaigns"
@@ -83,7 +80,7 @@ export default async function LandingPage() {
 
           <div className="border-l-2 border-wine-500 pl-6">
             <p className="font-mono text-4xl font-medium text-wine-700 sm:text-5xl">
-              {currency(totalRaised)}
+              <CountUp value={totalRaised} />
             </p>
             <p className="mt-2 text-sm text-ink/60">
               raised across {campaigns.length} active campaigns
@@ -92,81 +89,54 @@ export default async function LandingPage() {
         </div>
       </section>
 
-      {/* CAMPAIGN STRIP */}
       {campaigns.length > 0 && (
         <section className="mx-auto max-w-6xl px-6 py-20">
           <div className="mb-8 flex items-baseline justify-between border-b border-ink/10 pb-4">
-            <h2 className="font-display text-2xl  text-wine-900">Live now</h2>
+            <h2 className="font-display text-2xl text-wine-900">Live now</h2>
             <Link
               href="/campaigns"
-              className="font-mono text-xs uppercase tracking-wider text-paper hover:text-paper/90 bg-wine-500 p-3 font-semibold transition hover:bg-wine-700"
+              className="bg-wine-500 p-3 font-mono text-xs font-semibold uppercase tracking-wider text-paper transition hover:bg-wine-700 hover:text-paper/90"
             >
               View all
             </Link>
           </div>
 
-          <div className="grid gap-px bg-ink/10 lg:grid-cols-4">
+          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
             {campaigns.map((c) => {
-              // const raised = raisedByCampaign.get(c.id) ?? 0;
-
               const pct = Math.min(
                 100,
                 Math.round((c.raised / Number(c.goal_amount)) * 100),
               );
               return (
-                // <Link
-                //   key={c.id}
-                //   href={`/campaigns/${c.slug}`}
-                //   className="group bg-paper p-5 transition hover:bg-wine-50 border border-ink/70"
-                // >
-                //   {c.image_url && (
-                //     <Image
-                //       src={c.image_url}
-                //       alt={c.title}
-                //       className=" bg-paper-dim bg-center bg-cover grayscale-[15%] transition group-hover:grayscale-0"
-                //     />
-                //   )}
-                //   <span className="border border-sky-500/40 px-2 py-0.5 font-mono text-[10px] uppercase tracking-wider text-sky-700">
-                //     {STATUS_LABEL[c.status] ?? c.status}
-                //   </span>
-
-                //   <h3 className="font-display text-lg leading-snug text-ink group-hover:text-wine-700">
-                //     {c.title}
-                //   </h3>
-                //   <div className="mt-4 h-0.5 w-full bg-ink/20">
-                //     <div
-                //       className="h-1 bg-sky-500"
-                //       style={{ width: `${pct}%` }}
-                //     />
-                //   </div>
-                //   <p className="mt-2 font-mono text-xs text-ink/60">
-                //     {pct}% of {currency(Number(c.goal_amount))}
-                //   </p>
-                // </Link>
                 <Link
                   key={c.id}
                   href={`/campaigns/${c.slug}`}
-                  className="group border bg-paper shadow-sm transition"
+                  className="group border border-ink/10 bg-paper shadow-sm transition hover:border-wine-500 hover:shadow-md"
                 >
                   {c.image_url && (
                     <div
-                      className="h-44 w-full bg-paper-dim bg-cover bg-center grayscale-[15%] transition group-hover:grayscale-0"
+                      className="h-36 w-full bg-paper-dim bg-cover bg-center"
                       style={{ backgroundImage: `url(${c.image_url})` }}
                     />
                   )}
-                  <div className="p-6">
-                    <span className="border px-2 py-0.5 font-mono text-[10px] uppercase tracking-wider">
+                  <div className="p-5">
+                    <span
+                      className={`border px-2 py-0.5 font-mono text-[10px] uppercase tracking-wider ${
+                        STATUS_BADGE_STYLE[c.status] ??
+                        "border-ink/20 text-ink/50"
+                      }`}
+                    >
                       {STATUS_LABEL[c.status] ?? c.status}
                     </span>
-                    <h2 className="mt-3 font-display text-xl italic text-wine-900 group-hover:text-wine-500">
+                    <h2 className="mt-2 font-display text-lg  text-wine-900 group-hover:text-wine-500">
                       {c.title}
                     </h2>
-                    <p className="mt-2 line-clamp-2 text-sm text-ink/60">
+                    <p className="mt-1 line-clamp-2 text-sm text-ink/60">
                       {c.story}
                     </p>
-                    <div className="mt-5 h-1 w-full bg-ink/10">
+                    <div className="mt-4 h-1 w-full bg-ink/10">
                       <div
-                        className={`h-1  "bg-sky-500"}`}
+                        className="h-1 bg-sky-500"
                         style={{ width: `${pct}%` }}
                       />
                     </div>

@@ -1,4 +1,3 @@
-// app/admin/campaigns/new/page.tsx
 "use client";
 
 import { useRouter } from "next/navigation";

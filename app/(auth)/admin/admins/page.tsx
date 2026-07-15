@@ -1,4 +1,4 @@
-// app/admin/sub-admins/page.tsx
+
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { removeSubAdmin } from "../actions";
@@ -27,7 +27,7 @@ export default async function SubAdminsPage() {
 
   return (
     <main className="mx-auto max-w-3xl px-6 py-12">
-      <h1 className="font-display text-2xl italic text-wine-900">Admins</h1>
+      <h1 className="font-display text-2xl text-wine-900">Admins</h1>
       <p className="mt-1 text-sm text-ink/60">
         Invite people to help manage campaigns. They&apos;ll get an email to set
         a password.

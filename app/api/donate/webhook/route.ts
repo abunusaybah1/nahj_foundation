@@ -3,10 +3,6 @@ import { NextRequest, NextResponse } from "next/server";
 import crypto from "crypto";
 import { createServiceClient } from "@/lib/supabase/service";
 
-// Paystack calls this directly from their servers after a payment
-// event — the most reliable confirmation path, since it doesn't
-// depend on the donor's browser staying open.
-// Set this as your webhook URL: https://dashboard.paystack.com/#/settings/webhooks
 export async function POST(req: NextRequest) {
   const secret = process.env.PAYSTACK_SECRET_KEY;
   if (!secret) {
@@ -33,9 +29,7 @@ export async function POST(req: NextRequest) {
   if (event.event === "charge.success") {
     const reference = event.data?.reference;
     const amountKobo = event.data?.amount;
-    // Paystack's actual fee for this transaction, in kobo. Present on
-    // charge.success — this is what they actually deducted, so it's
-    // more reliable than us recalculating their fee formula ourselves.
+  
     const feeKobo = event.data?.fees ?? 0;
 
     if (reference) {

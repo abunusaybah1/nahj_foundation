@@ -1,4 +1,3 @@
-// app/api/donate/initialize/route.ts
 import { NextRequest, NextResponse } from "next/server";
 import { randomUUID } from "crypto";
 import { createServiceClient } from "@/lib/supabase/service";
@@ -45,8 +44,7 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // Reference is generated server-side so it can't be guessed or
-    // reused by the client.
+ 
     const reference = `don_${randomUUID().replace(/-/g, "")}`;
 
     const { error: insertError } = await supabase.from("donations").insert({

@@ -1,4 +1,3 @@
-// app/admin/campaigns/[id]/ManualDonationForm.tsx
 "use client";
 
 import { useState } from "react";

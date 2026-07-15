@@ -1,4 +1,3 @@
-// app/campaigns/[slug]/CampaignClient.tsx
 "use client";
 
 import { useState } from "react";
@@ -93,10 +92,6 @@ export default function CampaignClient({
           publicKey={process.env.NEXT_PUBLIC_PAYSTACK_PUBLIC_KEY!}
           onClose={() => setSheetOpen(false)}
           onDonationConfirmed={(amount) => {
-            // Only update the raised total here — do NOT close the
-            // sheet. The sheet's own "success" step stays visible so
-            // the donor sees the thank-you/receipt message, and closes
-            // itself only when they click "Done".
             setRaised((r) => r + amount);
           }}
         />

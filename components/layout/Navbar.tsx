@@ -1,4 +1,3 @@
-// components/layout/Navbar.tsx
 "use client";
 
 import Link from "next/link";
@@ -19,9 +18,6 @@ export default function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
 
-  // Close the dropdown / mobile overlay when the route changes.
-  // Adjusting state during render is the recommended pattern for
-  // "reset this when X changes" — see https://react.dev/learn/you-might-not-need-an-effect
   const [prevPathname, setPrevPathname] = useState(pathname);
   if (pathname !== prevPathname) {
     setPrevPathname(pathname);
@@ -63,8 +59,7 @@ export default function Navbar() {
     };
   }, [pathname]);
 
-  // Close dropdown on outside click — legitimate effect, subscribing
-  // to a real external event source (the DOM).
+
   useEffect(() => {
     function handleClick(e: MouseEvent) {
       if (menuRef.current && !menuRef.current.contains(e.target as Node)) {
@@ -75,13 +70,6 @@ export default function Navbar() {
     return () => document.removeEventListener("mousedown", handleClick);
   }, []);
 
-  // Lock body scroll while the mobile overlay is open.
-  useEffect(() => {
-    document.body.style.overflow = mobileOpen ? "hidden" : "";
-    return () => {
-      document.body.style.overflow = "";
-    };
-  }, [mobileOpen]);
 
   async function handleLogout() {
     const supabase = createClient();
@@ -198,7 +186,6 @@ export default function Navbar() {
           </div>
         </div>
 
-        {/* Mobile hamburger */}
         <button
           onClick={() => setMobileOpen(true)}
           aria-label="Open menu"
@@ -210,7 +197,6 @@ export default function Navbar() {
         </button>
       </nav>
 
-      {/* Mobile full-screen overlay */}
       {mobileOpen && (
         <div className="fixed inset-0 z-50 flex flex-col bg-paper sm:hidden">
           <div className="flex items-center justify-between border-b border-ink/10 px-6 py-4">

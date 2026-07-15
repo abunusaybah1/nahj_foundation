@@ -1,4 +1,3 @@
-// app/admin/campaigns/[id]/actions.ts
 "use server";
 
 import { revalidatePath } from "next/cache";
@@ -16,10 +15,6 @@ export async function updateCampaign(
 ) {
   const supabase = await createClient();
 
-  // No manual "am I the owner or super admin" check needed here — the
-  // RLS policies on `campaigns` already enforce that: an update only
-  // succeeds if created_by = auth.uid() OR the caller is super_admin.
-  // If neither is true, this simply updates zero rows.
   const { data, error } = await supabase
     .from("campaigns")
     .update({
@@ -60,8 +55,6 @@ export async function recordManualDonation(
     return { error: "Enter an amount greater than zero." };
   }
 
-  // RLS restricts this insert to super_admin only — see
-  // "Admins can record manual donations" in supabase/fixes-manual-donations.sql.
   const { error } = await supabase.from("donations").insert({
     campaign_id: campaignId,
     reference: `manual_${crypto.randomUUID().replace(/-/g, "")}`,
@@ -100,8 +93,6 @@ export async function updateDonation(
     return { error: "Enter an amount greater than zero." };
   }
 
-  // RLS restricts donation updates to super_admin only — a sub_admin
-  // calling this simply updates zero rows rather than erroring.
   const { data, error } = await supabase
     .from("donations")
     .update({
@@ -149,8 +140,6 @@ export async function deleteDonation(donationId: string) {
 export async function deleteCampaign(campaignId: string) {
   const supabase = await createClient();
 
-  // RLS restricts deletes to super_admin only — a sub_admin calling
-  // this will simply delete zero rows, not error, so we check that.
   const { data, error } = await supabase
     .from("campaigns")
     .delete()

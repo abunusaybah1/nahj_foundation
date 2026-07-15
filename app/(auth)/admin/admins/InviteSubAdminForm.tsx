@@ -14,7 +14,6 @@ export default function InviteSubAdminForm() {
   const [message, setMessage] = useState("");
   const [prevState, setPrevState] = useState(state);
 
-  // Derive message during render when state changes (not in an effect)
   if (state !== prevState) {
     setPrevState(state);
     setMessage(
@@ -22,8 +21,7 @@ export default function InviteSubAdminForm() {
     );
   }
 
-  // This effect is a genuine side effect: it just manages the auto-clear timer
-  useEffect(() => {
+ useEffect(() => {
     if (!message) return;
     const timeout = setTimeout(() => setMessage(""), 5000);
     return () => clearTimeout(timeout);

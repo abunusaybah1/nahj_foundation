@@ -1,4 +1,3 @@
-// app/campaigns/[slug]/page.tsx
 import { notFound } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import CampaignClient from "./CampaignClient";
@@ -19,8 +18,6 @@ export default async function CampaignDetailPage({
     .eq("slug", slug)
     .single();
 
-  // Archived campaigns stay visible (closed, showing their final
-  // total) — only draft or nonexistent campaigns 404 for the public.
   if (!campaign || !["published", "archived"].includes(campaign.status)) {
     notFound();
   }

@@ -20,34 +20,38 @@ export default function ManualPaymentInfo() {
   return (
     <div className="flex flex-col gap-4">
       <p className="text-sm leading-relaxed text-ink/70">
-        Having trouble with the payment link? You can send your donation directly by bank transfer instead.
+        Having trouble with the payment link? You can send your donation
+        directly by bank transfer instead.
       </p>
 
       <div className="border border-ink/10 bg-paper-dim px-5 py-4">
         <div className="flex items-center justify-between">
-          <span className="font-mono text-xs uppercase tracking-wide text-ink/50">Bank</span>
+          <span className="font-mono text-xs uppercase tracking-wide text-ink/50">
+            Bank
+          </span>
           <span className="font-medium text-ink">{ACCOUNT.bank}</span>
         </div>
         <div className="mt-3 flex items-center justify-between">
-          <span className="font-mono text-xs uppercase tracking-wide text-ink/50">Account Number</span>
+          <span className="font-mono text-xs uppercase tracking-wide text-ink/50">
+            Account Number
+          </span>
           <button
             onClick={handleCopy}
             className="flex items-center gap-2 font-mono text-base text-wine-500 hover:text-wine-700"
           >
             {ACCOUNT.number}
-            <span className="text-xs text-ink/40">{copied ? "Copied!" : "Copy"}</span>
+            <span className="text-xs text-ink/40">
+              {copied ? "Copied!" : "Copy"}
+            </span>
           </button>
         </div>
         <div className="mt-3 flex items-center justify-between">
-          <span className="font-mono text-xs uppercase tracking-wide text-ink/50">Account Name</span>
+          <span className="font-mono text-xs uppercase tracking-wide text-ink/50">
+            Account Name
+          </span>
           <span className="font-medium text-ink">{ACCOUNT.name}</span>
         </div>
       </div>
-
-      <p className="text-center text-sm text-ink/60">
-        May Allah enrich us all, Aameen<br />
-        <span className="font-medium text-ink/80">JazākumuLlāhu Khayran</span>
-      </p>
     </div>
   );
 }

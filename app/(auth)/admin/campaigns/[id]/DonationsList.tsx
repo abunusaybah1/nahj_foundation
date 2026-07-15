@@ -1,4 +1,3 @@
-// app/(auth)/admin/campaigns/[id]/DonationsList.tsx
 "use client";
 
 import { useState } from "react";

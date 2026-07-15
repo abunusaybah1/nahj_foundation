@@ -1,4 +1,3 @@
-// app/api/donate/verify/route.ts
 import { NextRequest, NextResponse } from "next/server";
 import { verifyTransaction } from "@/lib/paystack";
 import { createServiceClient } from "@/lib/supabase/service";
@@ -34,8 +33,7 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ status: "success" });
     }
 
-    // Ask Paystack directly — never trust the client's word on whether
-    // a payment succeeded.
+
     const result = await verifyTransaction(reference);
 
     if (result.status !== "success") {

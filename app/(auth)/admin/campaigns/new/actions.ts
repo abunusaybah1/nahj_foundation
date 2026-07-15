@@ -1,4 +1,3 @@
-// app/admin/campaigns/new/actions.ts
 "use server";
 
 import { createClient } from "@/lib/supabase/server";
@@ -29,8 +28,7 @@ export async function createCampaign(values: {
   }
 
   const baseSlug = slugify(values.title);
-  // Append a short random suffix so two campaigns with similar titles
-  // never collide on the unique slug constraint.
+
   const slug = `${baseSlug}-${Math.random().toString(36).slice(2, 7)}`;
 
   const { data, error } = await supabase

@@ -1,4 +1,4 @@
-// app/(auth)/admin/campaigns/[id]/CampaignDetailView.tsx
+
 "use client";
 
 import { useState } from "react";
@@ -91,8 +91,6 @@ export default function CampaignDetailView({
   const [editing, setEditing] = useState(false);
   const [justSaved, setJustSaved] = useState(false);
 
-  // Fees only exist once Paystack confirms a charge — pending/failed
-  // rows never carry a real fee value, so only count successful ones.
   const totalFees = donations
     .filter((d) => d.status === "success")
     .reduce((sum, d) => sum + Number(d.fee ?? 0), 0);

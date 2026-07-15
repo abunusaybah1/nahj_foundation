@@ -1,4 +1,3 @@
-// lib/paystack.ts
 const PAYSTACK_BASE_URL = "https://api.paystack.co";
 
 function secretKey() {
@@ -55,7 +54,7 @@ export async function verifyTransaction(reference: string) {
   if (!res.ok || !data.status) {
     throw new Error(data?.message ?? "Failed to verify Paystack transaction.");
   }
-  // in verifyTransaction, update the return type to include fees:
+
   return data.data as {
     status: "success" | "failed" | "abandoned";
     reference: string;

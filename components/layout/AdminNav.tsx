@@ -1,4 +1,3 @@
-// components/layout/AdminNav.tsx
 "use client";
 
 import Link from "next/link";
@@ -31,7 +30,7 @@ export default function AdminNav({
         <div className="flex items-center gap-8">
           <Link
             href="/admin"
-            className="font-display text-lg italic text-wine-900"
+            className="font-display text-lg  text-wine-900"
           >
             Nahj Admin
           </Link>

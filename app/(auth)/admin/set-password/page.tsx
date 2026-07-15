@@ -1,4 +1,3 @@
-// app/admin/set-password/page.tsx
 "use client";
 
 import { useEffect, useState } from "react";
@@ -15,15 +14,10 @@ export default function SetPasswordPage() {
   const [submitting, setSubmitting] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
 
-
   useEffect(() => {
     const supabase = createClient();
 
     async function establishSession() {
-      // Invite links from Supabase arrive as a hash fragment
-      // (#access_token=...&refresh_token=...&type=invite), not a
-      // ?code= query param — so PKCE's automatic exchange never
-      // triggers. Parse it ourselves and set the session directly.
       const hash = window.location.hash.startsWith("#")
         ? window.location.hash.slice(1)
         : window.location.hash;
@@ -37,8 +31,6 @@ export default function SetPasswordPage() {
           refresh_token,
         });
 
-        // Clean the token out of the URL either way, so it isn't
-        // sitting in browser history / visible in the address bar.
         window.history.replaceState(null, "", window.location.pathname);
 
         if (!error && data.session) {
@@ -48,8 +40,6 @@ export default function SetPasswordPage() {
         }
       }
 
-      // No hash tokens found — maybe a session already exists from
-      // an earlier successful load. Check before giving up.
       const {
         data: { session },
       } = await supabase.auth.getSession();
@@ -128,9 +118,7 @@ export default function SetPasswordPage() {
         onSubmit={handleSubmit}
         className="w-full max-w-sm border border-ink/10 p-8"
       >
-        <p className="font-display text-xl text-wine-900">
-          Set your password
-        </p>
+        <p className="font-display text-xl text-wine-900">Set your password</p>
         <p className="mt-2 text-sm text-ink/60">
           Choose a password to finish setting up your admin account.
         </p>

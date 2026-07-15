@@ -1,4 +1,3 @@
-// app/admin/campaigns/CampaignForm.tsx
 "use client";
 
 import { useState } from "react";
@@ -31,10 +30,7 @@ export default function CampaignForm({
   }) => Promise<{ error?: string; success?: boolean; redirectTo?: string }>;
   submitLabel: string;
   savedLabel?: string;
-  // Called ~700ms after a successful save, once the "Saved" message
-  // has had a moment to be visible — the parent decides what happens
-  // next (switch back to a read-only view, navigate to a new page,
-  // etc). Receives the redirectTo the server action returned, if any.
+
   onSaved?: (redirectTo?: string) => void;
 }) {
   const [title, setTitle] = useState(initial.title);
@@ -113,9 +109,7 @@ export default function CampaignForm({
     }
 
     setSaved(true);
-    // Give the person a moment to actually see the confirmation before
-    // the parent moves on (e.g. switching back to the read-only view,
-    // or navigating to the newly created campaign).
+
     setTimeout(() => onSaved?.(result?.redirectTo), 700);
   }
 

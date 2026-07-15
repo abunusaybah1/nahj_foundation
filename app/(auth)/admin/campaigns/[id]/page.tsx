@@ -1,4 +1,3 @@
-// app/admin/campaigns/[id]/page.tsx
 import { notFound } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import {
@@ -30,9 +29,6 @@ export default async function EditCampaignPage({
     .eq("id", user!.id)
     .single();
 
-  // RLS lets any signed-in admin READ any campaign (so they can see
-  // what other admins are running) — but only the owner or a super
-  // admin can successfully UPDATE it, enforced separately below.
   const { data: campaign } = await supabase
     .from("campaigns")
     .select("id, title, story, goal_amount, image_url, status, created_by")
@@ -48,9 +44,6 @@ export default async function EditCampaignPage({
   });
   const raised = Number(totals?.[0]?.raised ?? 0);
 
-  // Full donation history for this campaign — RLS already lets any
-  // signed-in admin read all donations; editing/deleting a row is
-  // restricted to super_admin separately, at the database level.
   const { data: donations } = await supabase
     .from("donations")
     .select(
@@ -68,7 +61,7 @@ export default async function EditCampaignPage({
       <p className="font-mono text-xs uppercase tracking-[0.2em] text-wine-500">
         {canEdit ? "Campaign" : "View"}
       </p>
-      <h1 className="mt-2 font-display text-3xl italic text-wine-900">
+      <h1 className="mt-2 font-display text-3xl  text-wine-900">
         {campaign.title}
       </h1>
 

@@ -1,4 +1,3 @@
-// components/admin/ConfirmButton.tsx
 "use client";
 
 import { useState, useTransition } from "react";

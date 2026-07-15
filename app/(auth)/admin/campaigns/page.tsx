@@ -1,4 +1,3 @@
-// app/(auth)/admin/campaigns/page.tsx
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 
@@ -31,8 +30,7 @@ export default async function AdminCampaignsPage() {
     data: { user },
   } = await supabase.auth.getUser();
 
-  // RLS already scopes this to "any signed-in admin can read all
-  // campaigns" — including drafts, unlike the public /campaigns page.
+
   const { data: campaigns } = await supabase
     .from("campaigns")
     .select(
@@ -123,7 +121,7 @@ export default async function AdminCampaignsPage() {
                     </span>
                   )}
                 </div>
-                <h2 className="mt-2 font-display text-lg italic text-wine-900 group-hover:text-wine-500">
+                <h2 className="mt-2 font-display text-lg   text-wine-900 group-hover:text-wine-500">
                   {c.title}
                 </h2>
                 <p className="mt-1 text-xs text-ink/50">

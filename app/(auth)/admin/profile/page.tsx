@@ -1,4 +1,3 @@
-// app/admin/profile/page.tsx
 import { createClient } from "@/lib/supabase/server";
 import { updateOwnProfile, changeOwnPassword } from "../actions";
 
@@ -17,7 +16,7 @@ export default async function ProfilePage() {
 
   return (
     <main className="mx-auto max-w-xl px-6 py-12">
-      <h1 className="font-display text-2xl italic text-wine-900">Profile</h1>
+      <h1 className="font-display text-2xl  text-wine-900">Profile</h1>
 
       <section className="mt-8 border border-ink/10 p-6">
         <p className="text-xs uppercase tracking-wide text-ink/40">Account</p>

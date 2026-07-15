@@ -1,4 +1,3 @@
-// app/campaigns/page.tsx
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 
@@ -20,10 +19,6 @@ function currency(n: number) {
 export default async function CampaignsPage() {
   const supabase = await createClient();
 
-  // Both published and archived show up here — archived campaigns are
-  // closed to new donations but still visible with their final total,
-  // for transparency. Only drafts stay hidden (RLS enforces this
-  // regardless of what's queried here).
   const { data: campaigns } = await supabase
     .from("campaigns")
     .select(
@@ -47,9 +42,6 @@ export default async function CampaignsPage() {
   return (
     <main className="mx-auto max-w-6xl px-6 py-16">
       <header className="mb-12 border-b border-ink/10 pb-8">
-        {/* <p className="font-mono text-xs uppercase tracking-[0.2em] text-wine-500">
-          All campaigns
-        </p> */}
         <h1 className="mt-3 font-display text-4xl text-wine-900 sm:text-5xl">
           All campaigns
         </h1>
@@ -95,7 +87,7 @@ export default async function CampaignsPage() {
                 >
                   {STATUS_LABEL[c.status] ?? c.status}
                 </span>
-                <h2 className="mt-3 font-display text-xl italic text-wine-900 group-hover:text-wine-500">
+                <h2 className="mt-3 font-display text-xl  text-wine-900 group-hover:text-wine-500">
                   {c.title}
                 </h2>
                 <p className="mt-2 line-clamp-2 text-sm text-ink/60">

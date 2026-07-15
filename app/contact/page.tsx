@@ -1,9 +1,8 @@
-// app/contact/page.tsx
 "use client";
 
 import { useState } from "react";
 
-const WHATSAPP_NUMBER = "2348164758649"; // swap for the real DM number
+const WHATSAPP_NUMBER = "2348164758649";
 
 export default function ContactPage() {
   const [name, setName] = useState("");
@@ -47,9 +46,7 @@ export default function ContactPage() {
 
   return (
     <main className="mx-auto max-w-xl px-6 py-16">
-      {/* <p className="font-mono text-xs uppercase tracking-[0.2em] text-wine-500">
-        Get in touch
-      </p> */}
+      
       <h1 className="mt-3 font-display text-3xl  text-wine-900 sm:text-4xl">
         Contact Us
       </h1>

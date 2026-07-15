@@ -1,4 +1,3 @@
-// app/(auth)/admin/login/page.tsx
 "use client";
 
 import { useState } from "react";
@@ -38,7 +37,7 @@ export default function AdminLoginPage() {
       <p className="font-mono text-xs uppercase tracking-[0.2em] text-wine-500">
         Admin
       </p>
-      <h1 className="mt-3 font-display text-3xl italic text-wine-900">
+      <h1 className="mt-3 font-display text-3xl  text-wine-900">
         Sign in
       </h1>
 

@@ -1,8 +1,7 @@
-// app/admin/page.tsx
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 
-export const revalidate = 0; // admin views should always be fresh, never cached
+export const revalidate = 0;
 
 function currency(n: number) {
   return new Intl.NumberFormat("en-NG", {
@@ -37,9 +36,6 @@ export default async function AdminDashboardPage() {
     .eq("id", user!.id)
     .single();
 
-  // RLS already lets any signed-in admin read all campaigns — this
-  // query intentionally does NOT filter by created_by, so admins can
-  // see what other admins are running too.
   const { data: campaigns } = await supabase
     .from("campaigns")
     .select("id, slug, title, status, goal_amount, created_by, created_at")
@@ -121,7 +117,7 @@ export default async function AdminDashboardPage() {
           </span>
         </div>
         <h3
-          className={`mt-2 font-display text-lg italic ${mine ? "text-wine-900" : "text-ink"}`}
+          className={`mt-2 font-display text-lg  ${mine ? "text-wine-900" : "text-ink"}`}
         >
           {c.title}
         </h3>
@@ -147,9 +143,6 @@ export default async function AdminDashboardPage() {
     <div className="flex flex-col gap-12 p-8">
       <header className="flex flex-wrap items-center justify-between gap-4 border-b border-ink/10 pb-6">
         <div>
-          {/* <p className="font-mono text-xs uppercase tracking-[0.2em] text-wine-500">
-            Dashboard
-          </p> */}
           <h1 className="mt-2 font-display text-3xl text-wine-900">
             Dashboard
           </h1>
@@ -167,13 +160,6 @@ export default async function AdminDashboardPage() {
           <div className="border border-wine-500/30 bg-wine-50 p-8 shadow-sm">
             <p className="text-ink/80">
               You haven&apos;t created a campaign yet.
-              {/* <Link
-                href="/admin/campaigns/new"
-                className="text-wine-500"
-              >
-                Create your first one
-              </Link> */}
-              .
             </p>
           </div>
         ) : (
