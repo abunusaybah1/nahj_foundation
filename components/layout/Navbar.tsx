@@ -210,11 +210,17 @@ export default function Navbar() {
       </nav>
 
       {mobileOpen && (
-        <div className="fixed inset-0 z-50 flex flex-col bg-paper sm:hidden">
-          <div className="flex items-center justify-between border-b border-ink/10 px-6 py-4">
-            <span className="font-display text-lg text-crimson-darker">
-              Nahj Foundation
-            </span>
+        <div className="fixed h-screen inset-0 z-50 flex flex-col bg-paper sm:hidden">
+          <div className="flex items-center justify-between border-b border-ink/10 px-6 py-2">
+            <Link href="/" className="font-display text-lg text-crimson-darker">
+              <Image
+                src="/images/trans-darkbg.png"
+                alt="Nahj Foundation"
+                width={64}
+                height={64}
+                loading="eager"
+              />
+            </Link>
             <CgClose
               onClick={() => setMobileOpen(false)}
               aria-label="Close menu"
@@ -287,7 +293,7 @@ export default function Navbar() {
               {!checked ? null : isAdminUser ? (
                 <button
                   onClick={handleLogout}
-                  className="w-full border border-crimson py-3 text-sm font-semibold text-crimson"
+                  className="w-full border border-crimson py-3 text-sm font-semibold text-crimson hover:bg-crimson hover:text-paper"
                 >
                   Log out
                 </button>
@@ -295,7 +301,7 @@ export default function Navbar() {
                 <Link
                   href="/admin/login"
                   onClick={() => setMobileOpen(false)}
-                  className="block w-full border border-crimson/40 py-3 text-center text-sm hover:border-crimson"
+                  className="block w-full border border-crimson/40 py-3 text-center text-sm hover:border-crimson hover:text-paper hover:bg-crimson"
                 >
                   Admin login
                 </Link>

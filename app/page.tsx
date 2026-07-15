@@ -82,7 +82,8 @@ export default async function LandingPage() {
               <CountUp value={totalRaised} />
             </p>
             <p className="mt-2 text-sm text-ink/60">
-              raised across {campaigns.length} active campaigns
+              raised across {campaigns.length} active{" "}
+              {campaigns.length === 1 ? "campaign" : "campaigns"}
             </p>
           </div>
         </div>
