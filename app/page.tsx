@@ -20,7 +20,7 @@ async function getFeaturedCampaigns() {
   const { data: campaigns } = await supabase
     .from("campaigns")
     .select("id, slug, title, goal_amount, image_url, status, story")
-    .eq("status", "published")
+    // .eq("status", "published")
     .order("created_at", { ascending: false })
     .limit(4);
 

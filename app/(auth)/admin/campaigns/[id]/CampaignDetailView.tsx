@@ -6,6 +6,7 @@ import CampaignForm from "../CampaignForm";
 import DeleteCampaignButton from "./DeleteCampaignButton";
 import ManualDonationForm from "./ManualDonationForm";
 import DonationsList from "./DonationsList";
+import VirtualAccountCard from "./VirtualAccountCard";
 
 type Campaign = {
   id: string;
@@ -14,6 +15,9 @@ type Campaign = {
   goal_amount: number;
   image_url: string | null;
   status: "draft" | "published" | "archived";
+  dva_account_number: string | null;
+  dva_bank_name: string | null;
+  dva_account_name: string | null;
 };
 
 type Donation = {
@@ -220,6 +224,20 @@ export default function CampaignDetailView({
           <p className="mt-1">{STATUS_LABEL[campaign.status]}</p>
         </div>
       </div>
+
+      <VirtualAccountCard
+        campaignId={campaign.id}
+        dva={
+          campaign.dva_account_number
+            ? {
+                account_number: campaign.dva_account_number,
+                bank_name: campaign.dva_bank_name ?? "",
+                account_name: campaign.dva_account_name ?? "",
+              }
+            : null
+        }
+        canManage={canEdit}
+      />
 
       <div className="border-t border-ink/10 pt-6">
         <p className="mb-3 font-mono text-xs uppercase tracking-wide text-ink/50">

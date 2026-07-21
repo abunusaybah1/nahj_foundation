@@ -4,7 +4,7 @@
   /* dark colors */
   --color-crimson: #330a0a;
   --color-crimson-darker: #1a0606;
-  --color-dandelion: #ffeb99;
+
 
 /* light colors */
   --color-paper: #f6f1e7; /* warm cream */
@@ -30,7 +30,7 @@ body {
 ::selection {
   background-color: var(--color-crimson);
 
-  color: var(--color-dandelion);
+  color: var(--color-paper);
 }
 
 :focus-visible {

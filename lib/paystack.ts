@@ -1,3 +1,4 @@
+// lib/paystack.ts
 const PAYSTACK_BASE_URL = "https://api.paystack.co";
 
 function secretKey() {
@@ -54,13 +55,63 @@ export async function verifyTransaction(reference: string) {
   if (!res.ok || !data.status) {
     throw new Error(data?.message ?? "Failed to verify Paystack transaction.");
   }
-
   return data.data as {
     status: "success" | "failed" | "abandoned";
     reference: string;
     amount: number;
-    fees: number; // add this line
+    fees: number;
     customer: { email: string };
     metadata?: Record<string, unknown>;
+  };
+}
+
+export async function createPaystackCustomer(params: {
+  email: string;
+  first_name: string;
+  last_name: string;
+  phone?: string;
+}) {
+  const res = await fetch(`${PAYSTACK_BASE_URL}/customer`, {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${secretKey()}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(params),
+  });
+
+  const data = await res.json();
+  if (!res.ok || !data.status) {
+    throw new Error(data?.message ?? "Failed to create Paystack customer.");
+  }
+  return data.data as { customer_code: string; id: number };
+}
+
+export async function createDedicatedVirtualAccount(params: {
+  customer: string; // customer_code
+  preferred_bank?: string; // e.g. "wema-bank" — omit to let Paystack pick
+}) {
+  const res = await fetch(`${PAYSTACK_BASE_URL}/dedicated_account`, {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${secretKey()}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      customer: params.customer,
+      preferred_bank: params.preferred_bank ?? "wema-bank",
+    }),
+  });
+
+  const data = await res.json();
+  if (!res.ok || !data.status) {
+    throw new Error(
+      data?.message ?? "Failed to create dedicated virtual account.",
+    );
+  }
+  return data.data as {
+    account_number: string;
+    account_name: string;
+    bank: { name: string };
   };
 }

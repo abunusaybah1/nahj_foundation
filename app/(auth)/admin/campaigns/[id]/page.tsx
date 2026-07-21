@@ -31,7 +31,7 @@ export default async function EditCampaignPage({
 
   const { data: campaign } = await supabase
     .from("campaigns")
-    .select("id, title, story, goal_amount, image_url, status, created_by")
+    .select("id, title, story, goal_amount, image_url, status, created_by, dva_account_number, dva_bank_name, dva_account_name")
     .eq("id", id)
     .single();
 
@@ -80,6 +80,9 @@ export default async function EditCampaignPage({
           goal_amount: campaign.goal_amount,
           image_url: campaign.image_url,
           status: campaign.status as "draft" | "published" | "archived",
+          dva_account_number: campaign.dva_account_number,
+          dva_bank_name: campaign.dva_bank_name,
+          dva_account_name: campaign.dva_account_name,
         }}
         raised={raised}
         donations={donations ?? []}
